@@ -1,7 +1,7 @@
 NAME=webserv
-SRC_DIR=src
+SRC_DIR=Server Client
 OBJ_DIR=obj
-SRC = $(SRC_DIR)/main.cpp
+SRC = webserv.cpp $(wildcard $(addsuffix /*.cpp,$(SRC_DIR)))
 OBJ= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 FLAGS= -Wall -Wextra -Werror -std=c++98
 GPP=g++
@@ -27,5 +27,6 @@ clean:
 	$(RM) $(OBJ_DIR)/%.o
 	$(RM) -r $(OBJ_DIR)
 re: fclean all
+
 .PHONY: all clean fclean re
 
