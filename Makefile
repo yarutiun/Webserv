@@ -1,9 +1,10 @@
 NAME=webserv
-SRC_DIR=Server Client
+SRC_DIR=Server Client Config
 OBJ_DIR=obj
 SRC = webserv.cpp $(wildcard $(addsuffix /*.cpp,$(SRC_DIR)))
 OBJ= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
-FLAGS= -Wall -Wextra -Werror -std=c++98
+FLAGS= -std=c++98
+#-Wall -Wextra -Werror
 GPP=g++
 RM=rm -f
 COLOR=\033[36m
