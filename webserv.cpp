@@ -7,15 +7,17 @@ void sigHandler(int sig)
     
 }
 volatile sig_atomic_t signum = 0;
+
 int main(void)
 {
     std::signal(SIGINT, sigHandler);
     std::signal(SIGTERM, sigHandler);
 
     Server webserv;
-   while(webserv.poll())
-   {
-       std::cout << "hi!!";
-   }
+
+    while(webserv.poll())
+    {
+        
+    }
     return(0);
 }

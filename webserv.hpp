@@ -26,5 +26,6 @@ class Config;
 //global variable//
 extern volatile sig_atomic_t				signum;
 
+#include <sys/socket.h>
 
 #endif

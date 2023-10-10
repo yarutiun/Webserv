@@ -4,10 +4,12 @@
 #include "../webserv.hpp"
 class Config;
 
+
 class Server{
     public:
         Server();
         bool poll();
+
 
     private:
 //        std::vector<Config>    _config_;
