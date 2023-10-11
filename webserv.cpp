@@ -18,7 +18,8 @@ int main(void)
     webserv.bindListeningSocket();
     while(webserv.poll())
     {
-        
+        webserv.acceptNewClients();
+
     }
     return(0);
 }

@@ -2,6 +2,7 @@
 #define SERVER_HPP
 
 #include "../webserv.hpp"
+class Binding;
 
 class Server{
     public:
@@ -9,6 +10,8 @@ class Server{
         bool poll();
         void launchBinds();
         void bindListeningSocket();
+        void acceptNewClients();
+        void addPollStruct(int fd, short events);
 
 
     private:

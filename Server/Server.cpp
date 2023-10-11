@@ -27,6 +27,7 @@ void Server::bindListeningSocket()
     if (listen(listeningSocket, SOMAXCONN) == -1)
         perror("listen error");
     
+    addPollStruct(listeningSocket, POLLIN);
     newBinding->setFd(listeningSocket);
     _binds_.push_back(newBinding);
     newBinding->whoIs();
@@ -46,3 +47,19 @@ bool Server::poll()
     return true;
 }
 
+void Server::acceptNewClients()
+{
+    sockaddr_in clientAddr;
+    socklen_t clientAddrSize = sizeof(clientAddr);
+    int newClientFd = accept(_pollStruct_->fd, (struct sockaddr *)&clientAddr, &clientAddrSize);
+}
+
+void Server::addPollStruct(int fd, short events)
+{
+    struct pollfd newPollStruct;
+    newPollStruct.fd = fd;
+    newPollStruct.events = events;
+    newPollStruct.revents = 0;
+    _pollStructs_.push_back(newPollStruct);
+    // _pollStruct_ = _pollStructs_.end() - 1;
+}
