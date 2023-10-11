@@ -27,5 +27,7 @@ class Config;
 extern volatile sig_atomic_t				signum;
 
 #include <sys/socket.h>
-
+#include <netinet/in.h>
+#include <fcntl.h>
+#include<sys/types.h>
 #endif

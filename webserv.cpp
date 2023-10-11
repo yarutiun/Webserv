@@ -15,6 +15,7 @@ int main(void)
 
     Server webserv;
 
+    webserv.bindListeningSocket();
     while(webserv.poll())
     {
         

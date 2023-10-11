@@ -9,6 +9,8 @@ class Server{
     public:
         Server();
         bool poll();
+        void launchBinds();
+        void bindListeningSocket();
 
 
     private:
