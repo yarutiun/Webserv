@@ -17,7 +17,7 @@ void Server::bindListeningSocket()
     int opt = 1;
 
     if (listeningSocket == -1)
-        perror("socket error");
+        perror("socket error"); //errors to be handled smarter
     if (setsockopt(listeningSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) == -1)
         perror("setsockopt error");
     if (fcntl(listeningSocket, F_SETFL, O_NONBLOCK) == -1)
@@ -26,7 +26,10 @@ void Server::bindListeningSocket()
         perror("bind error");
     if (listen(listeningSocket, SOMAXCONN) == -1)
         perror("listen error");
-
+    
+    newBinding->setFd(listeningSocket);
+    _binds_.push_back(newBinding);
+    newBinding->whoIs();
 }
 
 bool Server::poll() 
