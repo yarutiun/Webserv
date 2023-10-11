@@ -30,4 +30,12 @@ extern volatile sig_atomic_t				signum;
 #include <netinet/in.h>
 #include <fcntl.h>
 #include<sys/types.h>
+
+
+#include"Binding/Binding.hpp"
+class Binding;
+
+#include"netinet/in.h"
+#include"arpa/inet.h"
+#include<sstream>
 #endif

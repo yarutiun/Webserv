@@ -12,6 +12,7 @@ void Server::launchBinds()
 
 void Server::bindListeningSocket()
 {
+    Binding *newBinding = new Binding();
     int listeningSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     int opt = 1;
 
@@ -21,7 +22,10 @@ void Server::bindListeningSocket()
         perror("setsockopt error");
     if (fcntl(listeningSocket, F_SETFL, O_NONBLOCK) == -1)
         perror("fcntl error");
-    if (bind(listeingSocket, ) == -1)
+    if (bind(listeningSocket, (struct sockaddr*)newBinding->addrOfSocketAddr(), sizeof(sockaddr_in)) == -1)
+        perror("bind error");
+    if (listen(listeningSocket, SOMAXCONN) == -1)
+        perror("listen error");
 
 }
 
