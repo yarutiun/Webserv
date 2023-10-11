@@ -51,7 +51,22 @@ void Server::acceptNewClients()
 {
     sockaddr_in clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
-    int newClientFd = accept(_pollStruct_->fd, (struct sockaddr *)&clientAddr, &clientAddrSize);
+    int newClientFd = accept(_pollStructs_[0].fd, (struct sockaddr *)&clientAddr, &clientAddrSize); //
+    if (newClientFd == -1)
+        perror("accept error");
+    else
+    {
+        if (fcntl(newClientFd, F_SETFL, O_NONBLOCK) == -1)
+            perror("client fcntl error");
+        addPollStruct(newClientFd, POLLIN | POLLHUP);
+        // _clients_.push_back()
+    }
+}
+
+
+void Server::handleClients()
+{
+
 }
 
 void Server::addPollStruct(int fd, short events)
@@ -62,4 +77,17 @@ void Server::addPollStruct(int fd, short events)
     newPollStruct.revents = 0;
     _pollStructs_.push_back(newPollStruct);
     // _pollStruct_ = _pollStructs_.end() - 1;
+}
+
+std::vector<Client *>::iterator Server::getClientByFd(int fd)
+{
+    std::vector<Client *>::iterator it = _clients_.begin();
+    while (it != _clients_.end() && (*it)->getFd() != fd)
+        it++;
+    if (it == _clients_.end())
+    {
+        std::cerr << "Client not found" << std::endl;
+        throw std::runtime_error("Client not found"); //
+    }
+    return it;
 }

@@ -7,10 +7,10 @@
 #include <algorithm>
 #include <map>
 #include <vector>
-#include "Client/Client.hpp"
 #include<vector>
 #include<csignal>
-//class Client;
+#include "Client/Client.hpp"
+class Client;
 
 #include "Server/Server.hpp"
 class Server;
