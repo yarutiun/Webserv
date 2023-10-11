@@ -16,6 +16,7 @@ class Server{
         void handleClients();
         std::vector<Client *>::iterator getClientByFd(int fd);
         bool pollhup();
+        bool pullin();
         void closeClientConnection();
 
     private:

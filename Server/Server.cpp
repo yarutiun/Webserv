@@ -72,6 +72,7 @@ void Server::handleClients()
         _client_ = getClientByFd(_pollStruct_->fd);
         if (pollhup())
             continue;
+        
         _pollStruct_++;
     }
 
@@ -110,6 +111,7 @@ bool Server::pollhup()
         closeClientConnection();
         return true;
     }
+    return false;
 
 }
 
@@ -120,4 +122,14 @@ void Server::closeClientConnection() // add message to this function
     _pollStruct_ = _pollStructs_.erase(_pollStruct_); // erase returns the next valid position
     delete *_client_;
     _clients_.erase(_client_);
+}
+
+bool Server::pullin()
+{
+    if (_pollStruct_->revents & POLLIN)
+    {
+        //incoming data
+        return true;
+    }
+    return false;
 }
