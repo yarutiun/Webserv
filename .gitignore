@@ -1,4 +1,6 @@
 *.o
 a.out
 webserv
+/Config
 obj
+
