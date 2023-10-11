@@ -66,6 +66,14 @@ void Server::acceptNewClients()
 
 void Server::handleClients()
 {
+    _pollStruct_ = _pollStructs_.begin() + _binds_.size();
+    while(_pollStruct_ != _pollStructs_.end())
+    {
+        _client_ = getClientByFd(_pollStruct_->fd);
+        if (pollhup())
+            continue;
+        _pollStruct_++;
+    }
 
 }
 
@@ -90,4 +98,26 @@ std::vector<Client *>::iterator Server::getClientByFd(int fd)
         throw std::runtime_error("Client not found"); //
     }
     return it;
+}
+
+//Checks if a "hang-up" event occurred on the client socket (POLLHUP). 
+//If it did, it handles the hang-up event by closing the client connection.
+bool Server::pollhup()
+{
+    if (_pollStruct_->revents & POLLHUP)
+    {
+        std::cout << "Client " << _pollStruct_->fd << " disconnected" << std::endl;
+        closeClientConnection();
+        return true;
+    }
+
+}
+
+void Server::closeClientConnection() // add message to this function
+{
+    std::cout << "Closing Client on fd " << _pollStruct_->fd << std::endl;
+    close(_pollStruct_->fd);
+    _pollStruct_ = _pollStructs_.erase(_pollStruct_); // erase returns the next valid position
+    delete *_client_;
+    _clients_.erase(_client_);
 }

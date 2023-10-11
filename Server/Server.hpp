@@ -15,6 +15,8 @@ class Server{
         void addPollStruct(int fd, short events);
         void handleClients();
         std::vector<Client *>::iterator getClientByFd(int fd);
+        bool pollhup();
+        void closeClientConnection();
 
     private:
 //        std::vector<Config>    _config_;
@@ -22,5 +24,6 @@ class Server{
         std::vector<Client *>   _clients_;
         std::vector<struct pollfd>     _pollStructs_;
         std::vector<struct pollfd>::iterator _pollStruct_;
+        std::vector<Client *>::iterator _client_;
 };
 #endif

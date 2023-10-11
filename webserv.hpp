@@ -38,4 +38,6 @@ class Binding;
 #include"netinet/in.h"
 #include"arpa/inet.h"
 #include<sstream>
+#include"unistd.h"
+
 #endif
