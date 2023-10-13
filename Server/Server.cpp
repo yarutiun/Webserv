@@ -49,17 +49,24 @@ bool Server::poll()
 
 void Server::acceptNewClients()
 {
-    sockaddr_in clientAddr;
-    socklen_t clientAddrSize = sizeof(clientAddr);
-    int newClientFd = accept(_pollStructs_[0].fd, (struct sockaddr *)&clientAddr, &clientAddrSize); //
-    if (newClientFd == -1)
-        perror("accept error");
-    else
+    while (true)
     {
+        sockaddr_in clientAddr;
+        socklen_t clientAddrSize = sizeof(clientAddr);
+        int newClientFd = accept(_pollStructs_[0].fd, (struct sockaddr *)&clientAddr, &clientAddrSize); //
+        if (newClientFd == -1)
+        {
+            std::cout << errno;
+            if (errno == EWOULDBLOCK)
+                return ;
+            acceptError(newClientFd);
+        }
         if (fcntl(newClientFd, F_SETFL, O_NONBLOCK) == -1)
-            perror("client fcntl error");
-        addPollStruct(newClientFd, POLLIN | POLLHUP);
-        // _clients_.push_back()
+        {
+                // perror("client fcntl error");
+            addPollStruct(newClientFd, POLLIN | POLLHUP);
+            // _clients_.push_back()
+        }
     }
 }
 
@@ -69,6 +76,7 @@ void Server::handleClients()
     _pollStruct_ = _pollStructs_.begin() + _binds_.size();
     while(_pollStruct_ != _pollStructs_.end())
     {
+        std::cout << "handling client" << std::endl;
         _client_ = getClientByFd(_pollStruct_->fd);
         if (pollhup())
             continue;
@@ -130,10 +138,15 @@ bool Server::pullin()
 {
     if (_pollStruct_->revents & POLLIN)
     {
-        //incoming data
         (*_client_)->incomingData(_pollStruct_);
         ++_pollStruct_;
         return true;
     }
     return false;
+}
+
+void Server::acceptError(int fd)
+{
+    close(fd);
+    throw std::runtime_error("accept error");
 }

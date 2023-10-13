@@ -7,10 +7,12 @@ class Client
     public:
         int getFd();
         void incomingData(std::vector<struct pollfd>::iterator pollStruct);
+        void receive();
     
     private:
         int _fd_;
         std::vector<struct pollfd>::iterator _pollStruct_;
+        std::string _buffer_;
 };
 
 #endif

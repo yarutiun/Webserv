@@ -18,6 +18,7 @@ class Server{
         bool pollhup();
         bool pullin();
         void closeClientConnection();
+        void acceptError(int newClientFd);
 
     private:
 //        std::vector<Config>    _config_;
