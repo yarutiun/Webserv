@@ -9,8 +9,7 @@
 #include <vector>
 #include<vector>
 #include<csignal>
-#include "Client/Client.hpp"
-class Client;
+
 
 #include "Server/Server.hpp"
 class Server;
@@ -20,7 +19,7 @@ class Config;
 
 # include <sys/poll.h>
 
-//#include "defines.hpp"
+#include "defines.hpp"
 
 #include "Utils/utils.hpp"
 //global variable//
@@ -39,5 +38,8 @@ class Binding;
 #include"arpa/inet.h"
 #include<sstream>
 #include"unistd.h"
+
+#include "Client/Client.hpp"
+class Client;
 
 #endif

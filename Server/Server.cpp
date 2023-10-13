@@ -49,17 +49,28 @@ bool Server::poll()
 
 void Server::acceptNewClients()
 {
-    sockaddr_in clientAddr;
-    socklen_t clientAddrSize = sizeof(clientAddr);
-    int newClientFd = accept(_pollStructs_[0].fd, (struct sockaddr *)&clientAddr, &clientAddrSize); //
-    if (newClientFd == -1)
-        perror("accept error");
-    else
+    _pollStruct_ = _pollStructs_.begin();
+    while (_pollStruct_ != _pollStructs_.end())
     {
-        if (fcntl(newClientFd, F_SETFL, O_NONBLOCK) == -1)
-            perror("client fcntl error");
-        addPollStruct(newClientFd, POLLIN | POLLHUP);
-        // _clients_.push_back()
+        while (true)
+        {
+            sockaddr_in clientAddr;
+            socklen_t clientAddrSize = sizeof(clientAddr);
+            int newClientFd = accept(_pollStructs_[0].fd, (struct sockaddr *)&clientAddr, &clientAddrSize); //
+            if (newClientFd == -1)
+            {
+                std::cout << errno;
+                if (errno == EWOULDBLOCK)
+                    return ;
+                acceptError(newClientFd);
+            }
+            if (fcntl(newClientFd, F_SETFL, O_NONBLOCK) == -1)
+                acceptError(newClientFd);
+                    // perror("client fcntl error");
+            addPollStruct(newClientFd, POLLIN | POLLHUP);
+            _clients_.push_back(new Client(_pollStruct_, newClientFd, clientAddr));
+        }
+        _pollStruct_++; //
     }
 }
 
@@ -69,8 +80,13 @@ void Server::handleClients()
     _pollStruct_ = _pollStructs_.begin() + _binds_.size();
     while(_pollStruct_ != _pollStructs_.end())
     {
+        std::cout << "handling client" << std::endl;
         _client_ = getClientByFd(_pollStruct_->fd);
         if (pollhup())
+            continue;
+        if (pollin())
+            continue;
+        if (pollout())
             continue;
         
         _pollStruct_++;
@@ -126,14 +142,33 @@ void Server::closeClientConnection() // add message to this function
     _clients_.erase(_client_);
 }
 
-bool Server::pullin()
+bool Server::pollin()
 {
     if (_pollStruct_->revents & POLLIN)
     {
-        //incoming data
         (*_client_)->incomingData(_pollStruct_);
         ++_pollStruct_;
         return true;
     }
     return false;
 }
+
+bool    Server::pollout()
+{
+    if (_pollStruct_->revents & POLLOUT)
+    {
+        if ((*_client_)->outgoingData())
+            return (closeClientConnection(), true);
+        ++_pollStruct_;
+        return true;
+    }
+    return false;
+}
+
+void Server::acceptError(int fd)
+{
+    close(fd);
+    throw std::runtime_error("accept error");
+}
+
+

@@ -19,6 +19,7 @@ int main(void)
     while(webserv.poll())
     {
         webserv.acceptNewClients();
+        webserv.handleClients();
 
     }
     return(0);

@@ -16,8 +16,10 @@ class Server{
         void handleClients();
         std::vector<Client *>::iterator getClientByFd(int fd);
         bool pollhup();
-        bool pullin();
+        bool pollin();
+        bool pollout();
         void closeClientConnection();
+        void acceptError(int newClientFd);
 
     private:
 //        std::vector<Config>    _config_;
