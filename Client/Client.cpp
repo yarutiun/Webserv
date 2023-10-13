@@ -3,6 +3,7 @@
 
 Client::Client(std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _pollStruct_(pollstruct), _fd_(fd), _address_(address)
 {
+    std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
 }
 
 int Client::getFd()

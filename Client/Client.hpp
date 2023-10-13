@@ -2,6 +2,7 @@
 #define CLIENT_HPP
 
 #include "../webserv.hpp"
+
 class Client
 {
     public:
@@ -11,9 +12,9 @@ class Client
         void receive();
     
     private:
-        int _fd_;
-        std::vector<struct pollfd>::iterator _pollStruct_;
         std::string _buffer_;
+        std::vector<struct pollfd>::iterator _pollStruct_;
+        int _fd_;
         sockaddr_in _address_;
 };
 

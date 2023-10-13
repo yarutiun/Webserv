@@ -9,8 +9,7 @@
 #include <vector>
 #include<vector>
 #include<csignal>
-#include "Client/Client.hpp"
-class Client;
+
 
 #include "Server/Server.hpp"
 class Server;
@@ -39,5 +38,8 @@ class Binding;
 #include"arpa/inet.h"
 #include<sstream>
 #include"unistd.h"
+
+#include "Client/Client.hpp"
+class Client;
 
 #endif
