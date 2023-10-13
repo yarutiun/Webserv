@@ -1,5 +1,10 @@
 #include "Client.hpp"
 
+
+Client::Client(std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _pollStruct_(pollstruct), _fd_(fd), _address_(address)
+{
+}
+
 int Client::getFd()
 {
     return(_fd_);
