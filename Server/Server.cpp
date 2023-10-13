@@ -86,6 +86,8 @@ void Server::handleClients()
             continue;
         if (pollin())
             continue;
+        if (pollout())
+            continue;
         
         _pollStruct_++;
     }
@@ -151,8 +153,22 @@ bool Server::pollin()
     return false;
 }
 
+bool    Server::pollout()
+{
+    if (_pollStruct_->revents & POLLOUT)
+    {
+        if ((*_client_)->outgoingData())
+            return (closeClientConnection(), true);
+        ++_pollStruct_;
+        return true;
+    }
+    return false;
+}
+
 void Server::acceptError(int fd)
 {
     close(fd);
     throw std::runtime_error("accept error");
 }
+
+

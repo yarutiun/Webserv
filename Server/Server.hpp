@@ -17,6 +17,7 @@ class Server{
         std::vector<Client *>::iterator getClientByFd(int fd);
         bool pollhup();
         bool pollin();
+        bool pollout();
         void closeClientConnection();
         void acceptError(int newClientFd);
 

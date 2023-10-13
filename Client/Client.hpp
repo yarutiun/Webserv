@@ -10,6 +10,7 @@ class Client
         int getFd();
         void incomingData(std::vector<struct pollfd>::iterator pollStruct);
         void receive();
+        bool outgoingData();
     
     private:
         std::string _buffer_;

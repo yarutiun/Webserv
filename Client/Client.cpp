@@ -27,3 +27,9 @@ void Client::receive()
         perror("recv error"); // 
     _buffer_.append(buff, bytesReceived);
 }
+
+bool Client::outgoingData()
+{
+    ////////
+    return true; // should be amended 
+}
