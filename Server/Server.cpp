@@ -75,6 +75,8 @@ void Server::handleClients()
         
         _pollStruct_++;
     }
+    //try - catch
+
 
 }
 
@@ -129,6 +131,8 @@ bool Server::pullin()
     if (_pollStruct_->revents & POLLIN)
     {
         //incoming data
+        (*_client_)->incomingData(_pollStruct_);
+        ++_pollStruct_;
         return true;
     }
     return false;
