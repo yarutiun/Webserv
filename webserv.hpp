@@ -7,17 +7,19 @@
 #include <algorithm>
 #include <map>
 #include <vector>
-#include<vector>
-#include<csignal>
+#include <csignal>
 
 
 #include "Server/Server.hpp"
 class Server;
 
-#include "Config/configFile.hpp"
+#include "Configuration/Configuration.hpp"
 class Config;
 
-# include <sys/poll.h>
+#include "Configuration/ConfigFileParser.hpp"
+class ConfigFileParser;
+
+#include <sys/poll.h>
 
 #include "defines.hpp"
 
@@ -41,5 +43,17 @@ class Binding;
 
 #include "Client/Client.hpp"
 class Client;
+
+// typedefs
+typedef struct locationInformation
+{
+    bool			get;
+    bool			post;
+    bool			delete_;
+    std::string		dir_listing;
+    std::string		http_redir;
+    std::string		upload_dir;
+    std::string		std_file;
+}	locInfo;
 
 #endif
