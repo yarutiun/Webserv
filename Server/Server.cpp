@@ -1,8 +1,12 @@
-#include"Server.hpp"
+#include "webserv.hpp"
 
 Server::Server() {
     std::string path = "configs/default.conf";
 
+//    if (argc > 1)
+//        path = argv[1];
+//    ConfigFileParser configFileParser(path.c_str());
+//    _configs_ = configFile.getConfigs();
 
 }
 
