@@ -1,7 +1,8 @@
 #include"Server.hpp"
 
 Server::Server() {
-    std::string path = "./sampleConfig.conf";
+    std::string path = "configs/default.conf";
+
 
 }
 
