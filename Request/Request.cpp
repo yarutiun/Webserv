@@ -91,9 +91,10 @@ void Request::parseRequestHeaders()
 	if (buffer->find("\r\n\r\n") == std::string::npos)
 	{
 		if (buffer->size() >= MAX_REQHEADSIZE)
-			throw ErrorCode(431, MYNAME);
+            perror("Request::parseRequestHeaders: buffer size exceeded"); // throw ErrorCode(431, MYNAME);
 		else
-			throw ErrorCode(400, MYNAME);
+            perror("Request::parseRequestHeaders: buffer does not contain \\r\\n\\r\\n"); //
+			//throw ErrorCode(400, MYNAME);
 	}
 	_headers = parseStrMap(*buffer, ":", "\r\n", "\r\n");
 	

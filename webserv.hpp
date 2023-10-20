@@ -57,4 +57,22 @@ typedef enum dynamicContentSelector
 	sessionLog
 }	dynCont;
 
+
+#include <fstream>
+
+
+typedef struct locationInformation
+{
+	bool			get;
+	bool			post;
+	bool			delete_;
+	std::string		dir_listing;
+	std::string		http_redir;
+	std::string		upload_dir;
+	std::string		std_file;
+}	locInfo;
+
+
+
+
 #endif
