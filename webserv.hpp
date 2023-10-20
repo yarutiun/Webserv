@@ -44,16 +44,44 @@ class Binding;
 #include "Client/Client.hpp"
 class Client;
 
-// typedefs
+
+#include "Response/Response.hpp"
+class Response;
+
+
 typedef struct locationInformation
 {
-    bool			get;
-    bool			post;
-    bool			delete_;
-    std::string		dir_listing;
-    std::string		http_redir;
-    std::string		upload_dir;
-    std::string		std_file;
+	bool			get;
+	bool			post;
+	bool			delete_;
+	std::string		dir_listing;
+	std::string		http_redir;
+	std::string		upload_dir;
+	std::string		std_file;
 }	locInfo;
+
+typedef enum dynamicContentSelector
+{
+	no,
+	statusPage,
+	dirListing,
+	sessionLog
+}	dynCont;
+
+
+#include "Request/Request.hpp"
+class Request;
+
+
+
+
+#include <fstream>
+
+
+
+#include <sys/stat.h>
+#include "Exceptions/ErrCode.hpp"
+class ErrCode;
+
 
 #endif

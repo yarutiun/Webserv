@@ -6,7 +6,7 @@ Client::Client(std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr
     std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
 }
 
-int Client::getFd()
+int Client::getFd() const
 {
     return(_fd_);
 }
@@ -16,6 +16,8 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
     _pollStruct_ = pollstruct;
     receive();
     std::cout << "Client " << _fd_ << " says: " << _buffer_ << std::endl;
+    if (!_request_)
+        newRequest();
 }
 
 void Client::receive()
@@ -32,4 +34,15 @@ bool Client::outgoingData()
 {
     ////////
     return true; // should be amended 
+}
+
+void Client::newRequest()
+{
+    _request_ = new Request(_buffer_, *this); // change later
+    _request_->process();
+}
+
+const char *Client::getAddr() const
+{
+    return(inet_ntoa(_address_.sin_addr));
 }
