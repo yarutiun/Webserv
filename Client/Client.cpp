@@ -15,7 +15,7 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
 {
     _pollStruct_ = pollstruct;
     receive();
-    std::cout << "Client " << _fd_ << " says: " << _buffer_ << std::endl;
+    // std::cout << "Client " << _fd_ << " says: " << _buffer_ << std::endl;
     if (!_request_)
         newRequest();
 }

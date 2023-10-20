@@ -4,7 +4,6 @@
 #include "../webserv.hpp"
 class Binding;
 class Client;
-class Config;
 
 class Server{
     public:

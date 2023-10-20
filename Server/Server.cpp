@@ -1,4 +1,4 @@
-#include "webserv.hpp"
+#include "../webserv.hpp"
 
 Server::Server() {
     std::string path = "configs/default.conf";

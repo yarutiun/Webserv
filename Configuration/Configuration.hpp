@@ -1,7 +1,7 @@
 #ifndef CONFIGURATION_H
 # define CONFIGURATION_H
 
-# include "webserv.hpp"
+# include "../webserv.hpp"
 
 class Configuration {
 
@@ -36,3 +36,4 @@ public:
 };
 
 #endif
+

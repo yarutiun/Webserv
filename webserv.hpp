@@ -9,12 +9,33 @@
 #include <vector>
 #include <csignal>
 
+typedef struct locationInformation
+{
+	bool			get;
+	bool			post;
+	bool			delete_;
+	std::string		dir_listing;
+	std::string		http_redir;
+	std::string		upload_dir;
+	std::string		std_file;
+}	locInfo;
+
+typedef enum dynamicContentSelector
+{
+	no,
+	statusPage,
+	dirListing,
+	sessionLog
+}	dynCont;
+
+#include"Config/configFile.hpp"
+class Config;
 
 #include "Server/Server.hpp"
 class Server;
 
 #include "Configuration/Configuration.hpp"
-class Config;
+class Configuration;
 
 #include "Configuration/ConfigFileParser.hpp"
 class ConfigFileParser;
@@ -49,24 +70,6 @@ class Client;
 class Response;
 
 
-typedef struct locationInformation
-{
-	bool			get;
-	bool			post;
-	bool			delete_;
-	std::string		dir_listing;
-	std::string		http_redir;
-	std::string		upload_dir;
-	std::string		std_file;
-}	locInfo;
-
-typedef enum dynamicContentSelector
-{
-	no,
-	statusPage,
-	dirListing,
-	sessionLog
-}	dynCont;
 
 
 #include "Request/Request.hpp"
