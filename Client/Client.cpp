@@ -6,7 +6,7 @@ Client::Client(std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr
     std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
 }
 
-int Client::getFd()
+int Client::getFd() const
 {
     return(_fd_);
 }
@@ -40,4 +40,9 @@ void Client::newRequest()
 {
     _request_ = new Request(_buffer_, *this); // change later
     _request_->process();
+}
+
+const char *Client::getAddr() const
+{
+    return(inet_ntoa(_address_.sin_addr));
 }

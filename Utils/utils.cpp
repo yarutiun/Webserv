@@ -205,3 +205,15 @@ std::string getHttpMsg(int code)
 		default: return "Unknown Error";
 	}
 }
+
+bool resourceExists(const std::string& path)
+{
+	if (path.empty())
+		return false;
+	
+	std::ifstream	resource(path.c_str());
+	bool			exists = resource.good();
+	
+	resource.close();
+	return exists;
+}

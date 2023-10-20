@@ -9,11 +9,12 @@ class Client
 {
     public:
         Client(std::vector<struct pollfd>::iterator pollStruct, int fd, sockaddr_in address);
-        int getFd();
+        int getFd() const;
         void incomingData(std::vector<struct pollfd>::iterator pollStruct);
         void receive();
         bool outgoingData();
         void newRequest();
+        const char *getAddr() const;
     
     private:
         std::string _buffer_;

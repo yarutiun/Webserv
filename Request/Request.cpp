@@ -152,136 +152,136 @@ void Request::trackSession()
 
 void Request::selectConfig()
 {
-	if (_requestedHost.empty())
-	{
-		std::cout << "Empty 'host' header. Running default config." << std::endl;
-		_activeConfig = _config;
-		_selectedHost = _activeConfig->getNames()[0];
-		return;
-	}
+	// if (_requestedHost.empty())
+	// {
+	// 	std::cout << "Empty 'host' header. Running default config." << std::endl;
+	// 	_activeConfig = _config;
+	// 	_selectedHost = _activeConfig->getNames()[0];
+	// 	return;
+	// }
 	
-	if (isStringInVec(_requestedHost, _config->getNames()))
-	{
-		std::cout << "Host '" << _requestedHost << "' belongs to default config." << std::endl;
-		_activeConfig = _config;
-		_selectedHost = _requestedHost;
-		return;
-	}
+	// if (isStringInVec(_requestedHost, _config->getNames()))
+	// {
+	// 	std::cout << "Host '" << _requestedHost << "' belongs to default config." << std::endl;
+	// 	_activeConfig = _config;
+	// 	_selectedHost = _requestedHost;
+	// 	return;
+	// }
 
-	for (size_t i = 0; i < _config->getAltConfigs().size(); ++i)
-	{
-		if (isStringInVec(_requestedHost, _config->getAltConfigs()[i].getNames()))
-		{
-			std::cout << "Host '" << _requestedHost << "' belongs to alternative config #" << i << "." << std::endl;
-			_activeConfig = &_config->getAltConfigs()[i];
-			_selectedHost = _requestedHost;
-			return;
-		}
-	}
+	// for (size_t i = 0; i < _config->getAltConfigs().size(); ++i)
+	// {
+	// 	if (isStringInVec(_requestedHost, _config->getAltConfigs()[i].getNames()))
+	// 	{
+	// 		std::cout << "Host '" << _requestedHost << "' belongs to alternative config #" << i << "." << std::endl;
+	// 		_activeConfig = &_config->getAltConfigs()[i];
+	// 		_selectedHost = _requestedHost;
+	// 		return;
+	// 	}
+	// }
 
-	_activeConfig = _config;
-	_selectedHost = _activeConfig->getNames()[0];
+	// _activeConfig = _config;
+	// _selectedHost = _activeConfig->getNames()[0];
 }
 
 void Request::requestError()
 {
-	if (_httpProtocol != HTTPVERSION)
-		throw ErrorCode(505, MYNAME);
+	// if (_httpProtocol != HTTPVERSION)
+	// 	throw ErrCode(505, MYNAME);
 
-	if (_method != GET && _method != POST && _method != DELETE)
-		throw ErrorCode(501, MYNAME);
+	// if (_method != GET && _method != POST && _method != DELETE)
+	// 	throw ErrCode(501, MYNAME);
 
-	if (_contentLength > _activeConfig->getClientMaxBody())
-		throw ErrorCode(413, MYNAME);
+	// if (_contentLength > _activeConfig->getClientMaxBody())
+	// 	throw ErrCode(413, MYNAME);
 
-	std::map<std::string, locInfo>::const_iterator it = _activeConfig->getLocations()->find(_directory);
+	// std::map<std::string, locInfo>::const_iterator it = _activeConfig->getLocations()->find(_directory);
 
-	if (it == _activeConfig->getLocations()->end())
-	{
-		if ((_method == GET || _method == DELETE) && !resourceExists(prependRoot(_URL)))
-			throw ErrCode(404, MYNAME); // can't check before in case of http redir
+	// if (it == _activeConfig->getLocations()->end())
+	// {
+	// 	if ((_method == GET || _method == DELETE) && !resourceExists(prependRoot(_URL)))
+	// 		throw ErrCode(404, MYNAME); // can't check before in case of http redir
 
-		throw ErrCode(403, MYNAME); // should always 404 on a production system to not leak file structure
-	}
+	// 	throw ErrCode(403, MYNAME); // should always 404 on a production system to not leak file structure
+	// }
 	
-	_locationInfo = it->second;
+	// _locationInfo = it->second;
 
-	if ((_method == GET && !_locationInfo.get)
-		|| (_method == POST && !_locationInfo.post)
-		|| (_method == DELETE && !_locationInfo.delete_)) 
-		throw ErrCode(405, MYNAME);
+	// if ((_method == GET && !_locationInfo.get)
+	// 	|| (_method == POST && !_locationInfo.post)
+	// 	|| (_method == DELETE && !_locationInfo.delete_)) 
+	// 	throw ErrCode(405, MYNAME);
 }
 
 void Request::updateVars()
 {	
 	// file extension / CGI
 	
-	std::string extension = fileExtension(_file);
+	// std::string extension = fileExtension(_file);
 
-	if (extension == ".shmang")
-	{
-		if (_file == "sessionLog.shmang")
-			_internalScript = sessionLog;
-		/*
-		else if (_file == "anotherInternalDynamicContent.shmang")
-			_internalScript = anotherDynCont;
-		...
-		*/
-	}
-	else if (_activeConfig->getCgiPaths()->find(extension) != _activeConfig->getCgiPaths()->end())
-	{
-		_cgiExecPath = _activeConfig->getCgiPaths()->find(extension)->second;
-		_cgiRequest = true;
+	// if (extension == ".shmang")
+	// {
+	// 	if (_file == "sessionLog.shmang")
+	// 		_internalScript = sessionLog;
+	// 	/*
+	// 	else if (_file == "anotherInternalDynamicContent.shmang")
+	// 		_internalScript = anotherDynCont;
+	// 	...
+	// 	*/
+	// }
+	// else if (_activeConfig->getCgiPaths()->find(extension) != _activeConfig->getCgiPaths()->end())
+	// {
+	// 	_cgiExecPath = _activeConfig->getCgiPaths()->find(extension)->second;
+	// 	_cgiRequest = true;
 
-		std::stringstream	in, out;
+	// 	std::stringstream	in, out;
 		
-		in << SYS_TEMP_CGIIN << _client->getFd();
-		_cgiIn = in.str();
+	// 	in << SYS_TEMP_CGIIN << _client->getFd();
+	// 	_cgiIn = in.str();
 		
-		out << SYS_TEMP_CGIOUT << _client->getFd() << ".html";
-		_cgiOut = out.str();
-	}
+	// 	out << SYS_TEMP_CGIOUT << _client->getFd() << ".html";
+	// 	_cgiOut = out.str();
+	// }
 	
-	// standard file
+	// // standard file
 
-	_standardFile = _locationInfo.std_file;
-	if (_standardFile.empty())
-		_standardFile = _activeConfig->getStandardFile();
+	// _standardFile = _locationInfo.std_file;
+	// if (_standardFile.empty())
+	// 	_standardFile = _activeConfig->getStandardFile();
 	
-	// if (POST) -> upload_redir
+	// // if (POST) -> upload_redir
 
-	if (_method == POST && !_locationInfo.upload_dir.empty()) // upload_redir supercedes http_redir
-	{
-		_updatedDirectory = _locationInfo.upload_dir;
+	// if (_method == POST && !_locationInfo.upload_dir.empty()) // upload_redir supercedes http_redir
+	// {
+	// 	_updatedDirectory = _locationInfo.upload_dir;
 
-		if (!resourceExists(prependRoot(_updatedDirectory)))
-			throw ErrorCode(500, MYNAME);
+	// 	if (!resourceExists(prependRoot(_updatedDirectory)))
+	// 		throw ErrorCode(500, MYNAME);
 		
-		if (_activeConfig->getLocations()->find(_updatedDirectory) == _activeConfig->getLocations()->end())
-			throw ErrorCode(403, MYNAME); // upload_redir also has to be set in the config file
+	// 	if (_activeConfig->getLocations()->find(_updatedDirectory) == _activeConfig->getLocations()->end())
+	// 		throw ErrorCode(403, MYNAME); // upload_redir also has to be set in the config file
 		
-		_locationInfo = _activeConfig->getLocations()->find(_updatedDirectory)->second; // upload_redir changes locInfo
-	}
+	// 	_locationInfo = _activeConfig->getLocations()->find(_updatedDirectory)->second; // upload_redir changes locInfo
+	// }
 
-	// else -> http_redir
+	// // else -> http_redir
 
-	else if (!_locationInfo.http_redir.empty())
-		_updatedDirectory = _locationInfo.http_redir; // http_redir does not change locInfo
-	else
-		_updatedDirectory = _directory;
+	// else if (!_locationInfo.http_redir.empty())
+	// 	_updatedDirectory = _locationInfo.http_redir; // http_redir does not change locInfo
+	// else
+	// 	_updatedDirectory = _directory;
 
-	// finalize updated vars
+	// // finalize updated vars
 
-	_updatedDirectory = prependRoot(_updatedDirectory);
-	_updatedURL = _updatedDirectory + _file;
+	// _updatedDirectory = prependRoot(_updatedDirectory);
+	// _updatedURL = _updatedDirectory + _file;
 }
 
 std::string Request::prependRoot(const std::string& path) const
 {
-	if (path.find('/') == 0)
-		return _activeConfig->getRoot() + path.substr(1);
-	else
-		return path;
+	// if (path.find('/') == 0)
+	// 	return _activeConfig->getRoot() + path.substr(1);
+	// else
+	// 	return path;
 }
 
 std::string Request::appendSlash(const std::string& path)
@@ -348,14 +348,14 @@ const std::string& Request::file() const { return _file; }
 
 bool Request::dirListing() const
 {
-	if (_locationInfo.dir_listing == "yes")
-		return true;
-	else if (_locationInfo.dir_listing == "no")
-		return false;
-	else if (!_activeConfig->getDefaultDirlisting())
-		return false;
-	else
-		return true;
+	// if (_locationInfo.dir_listing == "yes")
+	// 	return true;
+	// else if (_locationInfo.dir_listing == "no")
+	// 	return false;
+	// else if (!_activeConfig->getDefaultDirlisting())
+	// 	return false;
+	// else
+	// 	return true;
 }
 
 bool Request::cgiRequest() const { return _cgiRequest; }
@@ -382,11 +382,13 @@ const locInfo* Request::locationInfo() const { return &_locationInfo; }
 
 std::string Request::statusPagePath(int code) const
 {
-	std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
+	// std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
 	
-	if (codePath == _activeConfig->getStatusPagePaths()->end())
-		return "";
-	return prependRoot(codePath->second);
+	// if (codePath == _activeConfig->getStatusPagePaths()->end())
+	// 	return "";
+	// return prependRoot(codePath->second);
 }
 
-const std::string& Request::root() const { return _activeConfig->getRoot(); }
+// const std::string& Request::root() const { 
+//     return _activeConfig->getRoot(); 
+// }
