@@ -12,6 +12,7 @@ std::string currentTimeCPP98();
 bool isStringInVec(const std::string& string, const std::vector<std::string>& vector);
 std::string fileExtension(const std::string& filename);
 bool isDirectory(const std::string& path);
+std::string getHttpMsg(int code);
 
 
 

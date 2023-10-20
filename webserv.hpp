@@ -73,7 +73,8 @@ typedef struct locationInformation
 }	locInfo;
 
 #include <sys/stat.h>
-
+#include "Exceptions/ErrCode.hpp"
+class ErrCode;
 
 
 #endif
