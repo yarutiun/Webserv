@@ -1,5 +1,5 @@
 NAME=webserv
-SRC_DIR=Server Client Config Binding
+SRC_DIR=Server Client Config Binding Request Response
 OBJ_DIR=obj
 SRC = webserv.cpp $(wildcard $(addsuffix /*.cpp,$(SRC_DIR)))
 OBJ= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))

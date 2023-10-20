@@ -42,4 +42,19 @@ class Binding;
 #include "Client/Client.hpp"
 class Client;
 
+#include "Response/Response.hpp"
+class Response;
+
+#include "Request/Request.hpp"
+class Request;
+
+
+typedef enum dynamicContentSelector
+{
+	no,
+	statusPage,
+	dirListing,
+	sessionLog
+}	dynCont;
+
 #endif

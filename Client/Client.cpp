@@ -16,6 +16,8 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
     _pollStruct_ = pollstruct;
     receive();
     std::cout << "Client " << _fd_ << " says: " << _buffer_ << std::endl;
+    if (!_request_)
+        newRequest();
 }
 
 void Client::receive()
@@ -32,4 +34,10 @@ bool Client::outgoingData()
 {
     ////////
     return true; // should be amended 
+}
+
+void Client::newRequest()
+{
+    _request_ = new Request(_buffer_, *this); // change later
+    _request_->process();
 }
