@@ -8,6 +8,7 @@ class Request
 {
 	public:
 		Request(std::string&, const Config&, const Client&);
+		Request(std::string&, const Client&);  // delete later
 		Request(const Request&);
 		
 		Request& 									operator=(const Request&);

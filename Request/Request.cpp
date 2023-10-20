@@ -1,9 +1,17 @@
-#include "webserv.hpp"
+#include "../webserv.hpp"
 
 Request::Request(std::string& bufferRef, const Config& config, const Client& client):
 	buffer(&bufferRef), // non const buffer from Client
 	_config(&config),
 	_activeConfig(&config),
+	_client(&client),
+	_cgiRequest(false),
+	_internalScript(no)
+{}
+
+// delete later
+Request::Request(std::string& bufferRef, const Client& client):
+	buffer(&bufferRef), // non const buffer from Client
 	_client(&client),
 	_cgiRequest(false),
 	_internalScript(no)
@@ -52,9 +60,9 @@ void Request::process()
 	parseRequestHeaders();
 	handleSessionID();
 	trackSession();
-	selectConfig();
-	requestError();
-	updateVars();
+	// selectConfig();
+	// requestError();
+	// updateVars();
 }
 
 std::string Request::prependClassName(std::string function)
@@ -65,8 +73,7 @@ std::string Request::prependClassName(std::string function)
 void Request::parseRequestLine()
 {
 	if (buffer->find("\r\n") == std::string::npos)
-        perror("Request::parseRequestLine: buffer does not contain \\r\\n");
-		// throw ErrorCode(400, MYNAME);
+		throw ErrCode(400, MYNAME);
 	
 	_method = splitEraseStr(*buffer, " ");
 	_URL = splitEraseStr(*buffer, " ");
@@ -150,8 +157,8 @@ void Request::trackSession()
 	}
 }
 
-void Request::selectConfig()
-{
+// void Request::selectConfig()
+// {
 	// if (_requestedHost.empty())
 	// {
 	// 	std::cout << "Empty 'host' header. Running default config." << std::endl;
@@ -181,10 +188,10 @@ void Request::selectConfig()
 
 	// _activeConfig = _config;
 	// _selectedHost = _activeConfig->getNames()[0];
-}
+// }
 
-void Request::requestError()
-{
+// void Request::requestError()
+// {
 	// if (_httpProtocol != HTTPVERSION)
 	// 	throw ErrCode(505, MYNAME);
 
@@ -210,10 +217,10 @@ void Request::requestError()
 	// 	|| (_method == POST && !_locationInfo.post)
 	// 	|| (_method == DELETE && !_locationInfo.delete_)) 
 	// 	throw ErrCode(405, MYNAME);
-}
+// }
 
-void Request::updateVars()
-{	
+// void Request::updateVars()
+// {	
 	// file extension / CGI
 	
 	// std::string extension = fileExtension(_file);
@@ -274,14 +281,15 @@ void Request::updateVars()
 
 	// _updatedDirectory = prependRoot(_updatedDirectory);
 	// _updatedURL = _updatedDirectory + _file;
-}
+// }
 
 std::string Request::prependRoot(const std::string& path) const
 {
-	// if (path.find('/') == 0)
-	// 	return _activeConfig->getRoot() + path.substr(1);
-	// else
-	// 	return path;
+	if (path.find('/') == 0)
+        return "hi line 289";
+		// return _activeConfig->getRoot() + path.substr(1);
+	else
+		return path;
 }
 
 std::string Request::appendSlash(const std::string& path)
@@ -320,75 +328,75 @@ void Request::whoIsI() const
 				<< separator << std::endl;
 }
 
-const Config*	Request::activeConfig() const { return _activeConfig; }
+// const Config*	Request::activeConfig() const { return _activeConfig; }
 
-const std::string& Request::method() const { return _method; }
+// const std::string& Request::method() const { return _method; }
 
-const std::string& Request::URL() const { return _URL; }
+// const std::string& Request::URL() const { return _URL; }
 
-const std::string& Request::httpProt() const { return _httpProtocol; }
+// const std::string& Request::httpProt() const { return _httpProtocol; }
 
-const std::string& Request::queryString() const { return _queryString; }
+// const std::string& Request::queryString() const { return _queryString; }
 
-const std::map<std::string, std::string>* Request::headers() const { return &_headers; }
+// const std::map<std::string, std::string>* Request::headers() const { return &_headers; }
 
-const std::map<std::string, std::string>* Request::cookies() const { return &_cookies; }
+// const std::map<std::string, std::string>* Request::cookies() const { return &_cookies; }
 
-const std::string& Request::requestedHost() const { return _requestedHost; }
+// const std::string& Request::requestedHost() const { return _requestedHost; }
 
-const std::string& Request::selectedHost() const { return _selectedHost; }
+// const std::string& Request::selectedHost() const { return _selectedHost; }
 
-size_t Request::contentLength() const { return _contentLength; }
+// size_t Request::contentLength() const { return _contentLength; }
 
-const std::string& Request::contentType() const { return _contentType; }
+// const std::string& Request::contentType() const { return _contentType; }
 
-const std::string& Request::directory() const { return _directory; }
+// const std::string& Request::directory() const { return _directory; }
 
-const std::string& Request::file() const { return _file; }
+// const std::string& Request::file() const { return _file; }
 
 bool Request::dirListing() const
 {
-	// if (_locationInfo.dir_listing == "yes")
-	// 	return true;
-	// else if (_locationInfo.dir_listing == "no")
-	// 	return false;
+	if (_locationInfo.dir_listing == "yes")
+		return true;
+	else if (_locationInfo.dir_listing == "no")
+		return false;
 	// else if (!_activeConfig->getDefaultDirlisting())
 	// 	return false;
 	// else
-	// 	return true;
+		return true;
 }
 
-bool Request::cgiRequest() const { return _cgiRequest; }
+// bool Request::cgiRequest() const { return _cgiRequest; }
 
-const std::string& Request::cgiExecPath() const { return _cgiExecPath; }
+// const std::string& Request::cgiExecPath() const { return _cgiExecPath; }
 
-const std::string& Request::cgiIn() const { return _cgiIn; }
+// const std::string& Request::cgiIn() const { return _cgiIn; }
 
-const std::string& Request::cgiOut() const { return _cgiOut; }
+// const std::string& Request::cgiOut() const { return _cgiOut; }
 
-const dynCont& Request::internalScript() const { return _internalScript; }
+// const dynCont& Request::internalScript() const { return _internalScript; }
 
-bool Request::setCookie() const { return _setCookie; }
+// bool Request::setCookie() const { return _setCookie; }
 
-const std::string& Request::sessionID() const { return _sessionID; }
+// const std::string& Request::sessionID() const { return _sessionID; }
 
-const std::string& Request::standardFile() const { return _standardFile; }
+// const std::string& Request::standardFile() const { return _standardFile; }
 
-const std::string& Request::updatedDir() const { return _updatedDirectory; }
+// const std::string& Request::updatedDir() const { return _updatedDirectory; }
 
-const std::string& Request::updatedURL() const { return _updatedURL; }
+// const std::string& Request::updatedURL() const { return _updatedURL; }
 
-const locInfo* Request::locationInfo() const { return &_locationInfo; }
+// const locInfo* Request::locationInfo() const { return &_locationInfo; }
 
-std::string Request::statusPagePath(int code) const
-{
-	// std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
+// std::string Request::statusPagePath(int code) const
+// {
+// 	// std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
 	
-	// if (codePath == _activeConfig->getStatusPagePaths()->end())
-	// 	return "";
-	// return prependRoot(codePath->second);
-}
-
-// const std::string& Request::root() const { 
-//     return _activeConfig->getRoot(); 
+// 	// if (codePath == _activeConfig->getStatusPagePaths()->end())
+// 	// 	return "";
+// 	// return prependRoot(codePath->second);
 // }
+
+// // const std::string& Request::root() const { 
+// //     return _activeConfig->getRoot(); 
+// // }

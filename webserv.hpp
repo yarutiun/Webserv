@@ -45,21 +45,6 @@ class Client;
 #include "Response/Response.hpp"
 class Response;
 
-#include "Request/Request.hpp"
-class Request;
-
-
-typedef enum dynamicContentSelector
-{
-	no,
-	statusPage,
-	dirListing,
-	sessionLog
-}	dynCont;
-
-
-#include <fstream>
-
 
 typedef struct locationInformation
 {
@@ -71,6 +56,25 @@ typedef struct locationInformation
 	std::string		upload_dir;
 	std::string		std_file;
 }	locInfo;
+
+typedef enum dynamicContentSelector
+{
+	no,
+	statusPage,
+	dirListing,
+	sessionLog
+}	dynCont;
+
+
+#include "Request/Request.hpp"
+class Request;
+
+
+
+
+#include <fstream>
+
+
 
 #include <sys/stat.h>
 #include "Exceptions/ErrCode.hpp"

@@ -8,6 +8,15 @@ void sigHandler(int sig)
 
 }
 
+std::string strToLower(const std::string& str)
+{
+	std::string	lowerStr = str;
+
+	for (std::string::iterator it = lowerStr.begin(); it != lowerStr.end(); it++)
+		*it = tolower(*it);
+	return lowerStr;
+}
+
 std::string splitEraseStr(std::string& input, const std::string& targetString)
 {
 	std::string	element;
@@ -71,14 +80,7 @@ std::map<std::string, std::string> parseStrMap(std::string& input, const std::st
 	return stringMap;
 }
 
-std::string strToLower(const std::string& str)
-{
-	std::string	lowerStr = str;
 
-	for (std::string::iterator it = lowerStr.begin(); it != lowerStr.end(); it++)
-		*it = tolower(*it);
-	return lowerStr;
-}
 
 std::string generateSessionId()
 {
