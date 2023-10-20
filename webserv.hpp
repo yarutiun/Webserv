@@ -72,6 +72,7 @@ typedef struct locationInformation
 	std::string		std_file;
 }	locInfo;
 
+#include <sys/stat.h>
 
 
 
