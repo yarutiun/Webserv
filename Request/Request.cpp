@@ -99,7 +99,7 @@ void Request::parseRequestHeaders()
 	if (buffer->find("\r\n\r\n") == std::string::npos)
 	{
 		if (buffer->size() >= MAX_REQHEADSIZE)
-            perror("Request::parseRequestHeaders: buffer size exceeded"); // throw ErrorCode(431, MYNAME);
+            throw ErrCode(431, MYNAME);
 		else
             perror("Request::parseRequestHeaders: buffer does not contain \\r\\n\\r\\n"); //
 			//throw ErrorCode(400, MYNAME);
