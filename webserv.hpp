@@ -7,17 +7,19 @@
 #include <algorithm>
 #include <map>
 #include <vector>
-#include<vector>
-#include<csignal>
+#include <csignal>
 
 
 #include "Server/Server.hpp"
 class Server;
 
-#include "Config/configFile.hpp"
+#include "Configuration/Configuration.hpp"
 class Config;
 
-# include <sys/poll.h>
+#include "Configuration/ConfigFileParser.hpp"
+class ConfigFileParser;
+
+#include <sys/poll.h>
 
 #include "defines.hpp"
 
@@ -41,6 +43,7 @@ class Binding;
 
 #include "Client/Client.hpp"
 class Client;
+
 
 #include "Response/Response.hpp"
 class Response;
