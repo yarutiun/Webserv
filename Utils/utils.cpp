@@ -219,3 +219,87 @@ bool resourceExists(const std::string& path)
 	resource.close();
 	return exists;
 }
+
+std::string splitEraseTrimChars(std::string& input, const std::string& targetChars)
+{
+    std::string element;
+    size_t 		len;
+
+    len = input.find_first_of(targetChars);
+    if (len == std::string::npos)
+    {
+        element = input;
+        input.erase();
+    }
+    else
+    {
+        element = input.substr(0, len);
+        input.erase(0, len);
+        trimWhitespace(input);
+    }
+    trimWhitespace(element);
+    return element;
+}
+
+bool isAlnumStrPlus(const std::string& input, const std::string& allowedChars)
+{
+    for (std::string::const_iterator it = input.begin(); it != input.end(); it++)
+        if (!isalnum(*it) && allowedChars.find(*it) == std::string::npos)
+            return false;
+    return true;
+}
+
+std::vector<std::string> splitEraseStrVec(std::string& input, const std::string& targetChars, const std::string& endOfParsing)
+{
+    std::vector<std::string>	stringVector;
+    std::string					parseRegion, element;
+
+    parseRegion = splitEraseTrimChars(input, endOfParsing);
+    input.erase(0, endOfParsing.size());
+    while (!parseRegion.empty())
+    {
+        element = splitEraseTrimChars(parseRegion, targetChars);
+        stringVector.push_back(element);
+    }
+    return stringVector;
+}
+
+std::string getInstruction(std::string& inputStr)
+{
+    std::string	instruction;
+    size_t		len_semicolon;
+
+    // Check whether semicolon delimits the instruction
+    len_semicolon = inputStr.find(";");
+    if (len_semicolon < inputStr.find("{"))
+    {
+        instruction = inputStr.substr(0, len_semicolon);
+        inputStr.erase(0, len_semicolon + 1);
+        trimWhitespace(instruction);
+        return instruction;
+    }
+
+    // Curly braces must now delimit the instruction
+    size_t	i;
+    int		bracesDepth;
+
+    i = inputStr.find("{");
+    if (i == std::string::npos || inputStr.find("}") < i)
+        throw std::runtime_error(E_INVALIDENDTOKEN + inputStr + '\n');
+    bracesDepth = 1;
+    while (inputStr[++i] && bracesDepth > 0 && bracesDepth < 3)
+    {
+        if (inputStr[i] == '{')
+            bracesDepth++;
+        else if (inputStr[i] == '}')
+            bracesDepth--;
+    }
+    if (bracesDepth != 0)
+        throw std::runtime_error(E_INVALIDBRACE + inputStr + '\n');
+    instruction = inputStr.substr(0, i);
+    inputStr.erase(0, i);
+    instruction.replace(instruction.find("{"), 1, " ");
+    instruction.replace(instruction.find_last_of("}"), 1, " ");
+    trimWhitespace(instruction);
+    return instruction;
+}

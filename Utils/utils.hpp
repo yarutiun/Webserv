@@ -14,12 +14,10 @@ std::string fileExtension(const std::string& filename);
 bool isDirectory(const std::string& path);
 std::string getHttpMsg(int code);
 bool resourceExists(const std::string& path);
-
-
-
-
-
-
+std::string	splitEraseTrimChars(std::string&, const std::string&);
+bool isAlnumStrPlus(const std::string&, const std::string&);
+std::vector<std::string> splitEraseStrVec(std::string&, const std::string&, const std::string&);
+std::string getInstruction(std::string&);
 
 
 #endif
