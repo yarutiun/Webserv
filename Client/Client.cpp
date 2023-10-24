@@ -21,6 +21,8 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
     //
     if ( _request_->method() == GET)
         handleGet();
+    if (_request_->method() == POST)
+        handlePost();
 }
 
 void Client::receive()
@@ -104,4 +106,28 @@ void Client::newResponse(dynCont &dynContent)
 
     _response_ = new DynContent(200, dynContent, *_request_);
     _pollStruct_->events = POLLOUT | POLLHUP;
+}
+
+void Client::handlePost()
+{
+    std::ofstream file;
+    std::string path;
+
+    if (_request_->cgiRequest())
+        path = _request_->cgiIn();
+    else
+    {
+        path = _request_->updatedURL();
+        if (resourceExists(path) && !_request_->locationInfo()->delete_)
+            throw ErrCode(409, "MYNAME"); //why MYNAME is not working btw? if delete is not allowed (=== file is there)
+    }
+    if (_append_)
+        file.open(path.c_str(), std::ios::binary | std::ios::app);
+    else
+    {
+        file.open(path.c_str(), std::ios::binary | std::ios::trunc);
+        _append_ = true;
+    }
+
+    
 }

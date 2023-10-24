@@ -49,9 +49,9 @@ class Request;
 #include "Response/Response.hpp"
 class Response;
 
+#include "defines.hpp"
 #include <sys/poll.h>
 
-#include "defines.hpp"
 
 #include "Utils/utils.hpp"
 //global variable//

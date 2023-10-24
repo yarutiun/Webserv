@@ -19,6 +19,7 @@ class Client
         void newResponse(dynCont &dynContent);
         const char *getAddr() const;
         void        handleGet();
+        void        handlePost();
 
     
     private:
@@ -29,6 +30,7 @@ class Client
         sockaddr_in _address_;
         Request     *_request_;
         Response    *_response_;
+        bool       _append_;
 };
 
 #endif
