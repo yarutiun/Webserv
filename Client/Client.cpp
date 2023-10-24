@@ -39,8 +39,12 @@ void Client::receive()
 
 bool Client::outgoingData()
 {
-    ////////
-    return true; // should be amended 
+    // if (_cgiInProgress_)
+    // {
+    //     if (handleCGI())
+    //         return true;
+    // }    
+    return _response_->send(_fd_);
 }
 
 void Client::newRequest()

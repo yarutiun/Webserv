@@ -33,6 +33,7 @@ class Client
         Response    *_response_;
         bool       _append_;
         size_t      _bytesWritten_;
+        bool        _cgiInProgress_;
 };
 
 #endif
