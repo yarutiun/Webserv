@@ -8,6 +8,8 @@
 #include <map>
 #include <vector>
 #include <csignal>
+#include <sstream>
+
 
 typedef struct locationInformation
 {
@@ -28,17 +30,18 @@ typedef enum dynamicContentSelector
 	sessionLog
 }	dynCont;
 
-#include"Config/configFile.hpp"
-class Config;
+// #include"Config/configFile.hpp"
+// class Config;
 
-#include "Server/Server.hpp"
-class Server;
 
 #include "Configuration/Configuration.hpp"
-class Configuration;
+class Config;
 
 #include "Configuration/ConfigFileParser.hpp"
 class ConfigFileParser;
+
+#include "Server/Server.hpp"
+class Server;
 
 #include "Request/Request.hpp"
 class Request;
@@ -46,13 +49,14 @@ class Request;
 #include "Response/Response.hpp"
 class Response;
 
+#include "defines.hpp"
 #include <sys/poll.h>
 
-#include "defines.hpp"
 
 #include "Utils/utils.hpp"
 //global variable//
 extern volatile sig_atomic_t				signum;
+extern std::map<std::string, std::string>	mimeTypes;
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -71,6 +75,11 @@ class Binding;
 #include "Client/Client.hpp"
 class Client;
 
+#include "Response/File.Response.hpp"
+class File;
+
+#include"Response/DynContent.Response.hpp"
+class DynContent;
 
 
 
@@ -84,12 +93,12 @@ class Client;
 
 #include <fstream>
 
-#include <sstream>
 
 
 #include <sys/stat.h>
 #include "Exceptions/ErrCode.hpp"
 class ErrCode;
 
+#include <dirent.h>   // For opendir and other directory-related functions
 
 #endif

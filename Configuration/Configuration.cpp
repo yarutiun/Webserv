@@ -1,4 +1,4 @@
-#include "webserv.hpp"
+#include "../webserv.hpp"
 
 //Private
 void Configuration::_setFunctionMap()

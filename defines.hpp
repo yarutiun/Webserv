@@ -90,3 +90,10 @@
 # define POST				"POST"
 # define DELETE				"DELETE"
 # define CGITITLE			"cgi"
+
+# define SERVERVERSION	"webserv v0.0"
+# define SEND_CHUNK_SIZE		8192
+
+# define E_SEND					"No data sent."
+# define E_RECV					"No data received."
+# define E_TEMPFILEREMOVAL		"Error: Response: Could not remove temp CGI-out file."

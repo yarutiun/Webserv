@@ -304,3 +304,120 @@ std::string getInstruction(std::string& inputStr)
     trimWhitespace(instruction);
     return instruction;
 }
+
+size_t fileSize(const std::string& filePath)
+{
+	struct stat	fileInfo;
+
+	if (filePath.empty())
+		return 0;
+	if (stat(filePath.c_str(), &fileInfo) != 0)
+		return 0;
+	return static_cast<size_t>(fileInfo.st_size);
+}
+
+std::string getMimeType(const std::string& filePath) 
+{
+	std::string	extension = fileExtension(filePath);
+
+	if (mimeTypes.find(extension) == mimeTypes.end())
+		return "application/octet-stream";
+	return mimeTypes[extension];
+}
+
+std::map<std::string, std::string> initMimeTypesMap()
+{
+	std::map<std::string, std::string>	mimeTypes;
+
+	mimeTypes[".html"] = "text/html";
+	mimeTypes[".htm"] = "text/html";
+	mimeTypes[".css"] = "text/css";
+	mimeTypes[".js"] = "application/javascript";
+	mimeTypes[".json"] = "application/json";
+	mimeTypes[".jpg"] = "image/jpeg";
+	mimeTypes[".jpeg"] = "image/jpeg";
+	mimeTypes[".png"] = "image/png";
+	mimeTypes[".gif"] = "image/gif";
+	mimeTypes[".bmp"] = "image/bmp";
+	mimeTypes[".ico"] = "image/x-icon";
+	mimeTypes[".svg"] = "image/svg+xml";
+	mimeTypes[".xml"] = "application/xml";
+	mimeTypes[".pdf"] = "application/pdf";
+	mimeTypes[".zip"] = "application/zip";
+	mimeTypes[".gz"] = "application/gzip";
+	mimeTypes[".tar"] = "application/x-tar";
+	mimeTypes[".mp4"] = "video/mp4";
+	mimeTypes[".mpeg"] = "video/mpeg";
+	mimeTypes[".avi"] = "video/x-msvideo";
+	mimeTypes[".avif"] = "image/avif";
+	mimeTypes[".ogg"] = "audio/ogg";
+	mimeTypes[".mp3"] = "audio/mpeg";
+	mimeTypes[".wav"] = "audio/wav";
+	mimeTypes[".mov"] = "video/quicktime";
+	mimeTypes[".ppt"] = "application/vnd.ms-powerpoint";
+	mimeTypes[".xls"] = "application/vnd.ms-excel";
+	mimeTypes[".doc"] = "application/msword";
+	mimeTypes[".csv"] = "text/csv";
+	mimeTypes[".txt"] = "text/plain";
+	mimeTypes[".rtf"] = "application/rtf";
+	mimeTypes[".shtml"] = "text/html";
+	mimeTypes[".php"] = "application/php";
+	mimeTypes[".jsp"] = "text/plain";
+	mimeTypes[".swf"] = "application/x-shockwave-flash";
+	mimeTypes[".ttf"] = "application/x-font-truetype";
+	mimeTypes[".eot"] = "application/vnd.ms-fontobject";
+	mimeTypes[".woff"] = "application/font-woff";
+	mimeTypes[".woff2"] = "font/woff2";
+	mimeTypes[".ics"] = "text/calendar";
+	mimeTypes[".vcf"] = "text/x-vcard";
+	mimeTypes[".mid"] = "audio/midi";
+	mimeTypes[".midi"] = "audio/midi";
+	mimeTypes[".wmv"] = "video/x-ms-wmv";
+	mimeTypes[".webm"] = "video/webm";
+	mimeTypes[".3gp"] = "video/3gpp";
+	mimeTypes[".3g2"] = "video/3gpp2";
+	mimeTypes[".pl"] = "text/plain";
+	mimeTypes[".py"] = "text/x-python";
+	mimeTypes[".java"] = "text/x-java-source";
+	mimeTypes[".c"] = "text/x-c";
+	mimeTypes[".cpp"] = "text/x-c++";
+	mimeTypes[".cs"] = "text/plain";
+	mimeTypes[".rb"] = "text/x-ruby";
+	mimeTypes[".htm"] = "text/html";
+	mimeTypes[".shtml"] = "text/html";
+	mimeTypes[".xhtml"] = "application/xhtml+xml";
+	mimeTypes[".m4a"] = "audio/mp4";
+	mimeTypes[".mp4a"] = "audio/mp4";
+	mimeTypes[".oga"] = "audio/ogg";
+	mimeTypes[".ogv"] = "video/ogg";
+	mimeTypes[".ogx"] = "application/ogg";
+	mimeTypes[".oga"] = "audio/ogg";
+	mimeTypes[".m3u8"] = "application/vnd.apple.mpegurl";
+	mimeTypes[".qt"] = "video/quicktime";
+	mimeTypes[".ts"] = "video/mp2t";
+	mimeTypes[".xl"] = "application/excel";
+	mimeTypes[".cab"] = "application/vnd.ms-cab-compressed";
+	mimeTypes[".msi"] = "application/x-msdownload";
+	mimeTypes[".dmg"] = "application/x-apple-diskimage";
+	mimeTypes[".exe"] = "application/octet-stream";
+	mimeTypes[".bin"] = "application/octet-stream";
+	mimeTypes[".ps"] = "application/postscript";
+	mimeTypes[".so"] = "application/octet-stream";
+	mimeTypes[".dll"] = "application/octet-stream";
+	mimeTypes[".m4v"] = "video/x-m4v";
+	mimeTypes[".ser"] = "application/java-serialized-object";
+	mimeTypes[".sh"] = "application/x-sh";
+	mimeTypes[".log"] = "text/plain";
+	mimeTypes[".diff"] = "text/x-diff";
+	mimeTypes[".patch"] = "text/x-diff";
+	mimeTypes[".xhtml"] = "application/xhtml+xml";
+	mimeTypes[".php"] = "application/x-httpd-php";
+	mimeTypes[".plist"] = "application/xml";
+	mimeTypes[".sln"] = "text/plain";
+	mimeTypes[".tiff"] = "image/tiff";
+	mimeTypes[".app"] = "application/octet-stream";
+	mimeTypes[".ics"] = "text/calendar";
+	mimeTypes[".webp"] = "image/webp";
+
+	return mimeTypes;
+}

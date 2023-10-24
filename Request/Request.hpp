@@ -7,15 +7,15 @@
 class Request
 {
 	public:
-		Request(std::string&, const Config&, const Client&);
-		Request(std::string&, const Client&);  // delete later
+		Request(std::string&, const Configuration&, const Client&);
+		// Request(std::string&, const Configuration &,const Client&);  // delete later
 		Request(const Request&);
 		
 		Request& 									operator=(const Request&);
 		void										whoIsI() const;
 		void										process();
 
-		const Config*								activeConfig() const;
+		const Configuration*								activeConfig() const;
 		const std::string&							method() const;
 		const std::string&							URL() const;
 		const std::string&							httpProt() const;
@@ -57,8 +57,8 @@ class Request
 		std::string 								appendSlash(const std::string&);
 
 		std::string*								buffer;
-		const Config*								_config;
-		const Config*								_activeConfig;
+		const Configuration*								_config;
+		const Configuration*								_activeConfig;
 		const Client*								_client;
 		std::string									_method;
 		std::string									_URL;
