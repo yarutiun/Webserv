@@ -78,6 +78,8 @@ class Client;
 #include "Response/File.Response.hpp"
 class File;
 
+#include"Response/DynContent.Response.hpp"
+class DynContent;
 
 
 
@@ -97,5 +99,6 @@ class File;
 #include "Exceptions/ErrCode.hpp"
 class ErrCode;
 
+#include <dirent.h>   // For opendir and other directory-related functions
 
 #endif

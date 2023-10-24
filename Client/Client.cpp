@@ -59,15 +59,49 @@ void Client::handleGet()
         std::string stdFile = _request_->updatedURL() + _request_->standardFile();
         if (resourceExists(stdFile))
             newResponse(stdFile);
+        else if (_request_->dirListing())
+            newResponse(dirListing);
+        else
+            newResponse(404);
+    }
+    else
+    {
+        if (resourceExists(_request_->updatedURL()))
+            newResponse(_request_->updatedURL());
+        else
+            newResponse(404);
     }
 }
 
 
-void Client::newResponse(std::string &stdFile)
+void Client::newResponse(std::string const &path)
 {
     if (_response_)
         delete _response_;
-    (void)stdFile;
-    // _response_ = new Response(_config_, *this, stdFile);
-    // _response_->process();
+
+    _response_ = new File(200, path, *_request_);
+    _pollStruct_->events = POLLOUT | POLLHUP;
+}
+
+void Client::newResponse(int statusCode)
+{
+    if (_response_)
+        delete _response_;
+
+   std::string userPagePath = _request_->statusPagePath(statusCode);
+
+	if (resourceExists(userPagePath))
+		_response_ = new File(statusCode, userPagePath, *_request_);
+	else
+		_response_ = new DynContent(statusCode, statusPage, *_request_);
+	_pollStruct_->events = POLLOUT | POLLHUP;
+}
+
+void Client::newResponse(dynCont &dynContent)
+{
+    if (_response_)
+        delete _response_;
+
+    _response_ = new DynContent(200, dynContent, *_request_);
+    _pollStruct_->events = POLLOUT | POLLHUP;
 }

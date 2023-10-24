@@ -14,9 +14,12 @@ class Client
         void receive();
         bool outgoingData();
         void newRequest();
-        void newResponse(std::string &sendPath);
+        void newResponse(const std::string &sendPath); // made it const ?!?
+        void newResponse(int statusCode);
+        void newResponse(dynCont &dynContent);
         const char *getAddr() const;
         void        handleGet();
+
     
     private:
         std::string _buffer_;
