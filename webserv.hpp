@@ -40,6 +40,12 @@ class Configuration;
 #include "Configuration/ConfigFileParser.hpp"
 class ConfigFileParser;
 
+#include "Request/Request.hpp"
+class Request;
+
+#include "Response/Response.hpp"
+class Response;
+
 #include <sys/poll.h>
 
 #include "defines.hpp"
@@ -66,20 +72,19 @@ class Binding;
 class Client;
 
 
-#include "Response/Response.hpp"
-class Response;
 
 
 
 
-#include "Request/Request.hpp"
-class Request;
+
+
 
 
 
 
 #include <fstream>
 
+#include <sstream>
 
 
 #include <sys/stat.h>

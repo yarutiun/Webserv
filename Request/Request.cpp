@@ -99,7 +99,7 @@ void Request::parseRequestHeaders()
 	if (buffer->find("\r\n\r\n") == std::string::npos)
 	{
 		if (buffer->size() >= MAX_REQHEADSIZE)
-            perror("Request::parseRequestHeaders: buffer size exceeded"); // throw ErrorCode(431, MYNAME);
+            throw ErrCode(431, MYNAME);
 		else
             perror("Request::parseRequestHeaders: buffer does not contain \\r\\n\\r\\n"); //
 			//throw ErrorCode(400, MYNAME);
@@ -331,7 +331,7 @@ void Request::whoIsI() const
 
 // const Config*	Request::activeConfig() const { return _activeConfig; }
 
-// const std::string& Request::method() const { return _method; }
+const std::string& Request::method() const { return _method; }
 
 // const std::string& Request::URL() const { return _URL; }
 
@@ -381,11 +381,11 @@ bool Request::dirListing() const
 
 // const std::string& Request::sessionID() const { return _sessionID; }
 
-// const std::string& Request::standardFile() const { return _standardFile; }
+const std::string& Request::standardFile() const { return _standardFile; }
 
-// const std::string& Request::updatedDir() const { return _updatedDirectory; }
+const std::string& Request::updatedDir() const { return _updatedDirectory; }
 
-// const std::string& Request::updatedURL() const { return _updatedURL; }
+const std::string& Request::updatedURL() const { return _updatedURL; }
 
 // const locInfo* Request::locationInfo() const { return &_locationInfo; }
 
