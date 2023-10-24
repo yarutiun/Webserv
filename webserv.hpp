@@ -28,17 +28,18 @@ typedef enum dynamicContentSelector
 	sessionLog
 }	dynCont;
 
-#include"Config/configFile.hpp"
-class Config;
+// #include"Config/configFile.hpp"
+// class Config;
 
-#include "Server/Server.hpp"
-class Server;
 
 #include "Configuration/Configuration.hpp"
 class Configuration;
 
 #include "Configuration/ConfigFileParser.hpp"
 class ConfigFileParser;
+
+#include "Server/Server.hpp"
+class Server;
 
 #include "Request/Request.hpp"
 class Request;

@@ -7,7 +7,7 @@ class Client;
 
 class Server{
     public:
-        Server();
+        Server(int argc, char **argv);
         bool poll();
         void launchBinds();
         void bindListeningSocket();
@@ -22,7 +22,7 @@ class Server{
         void acceptError(int newClientFd);
 
     private:
-        std::vector<Config>    _configs_;
+        std::vector<Configuration>    _configs_;
         std::vector<Binding *>   _binds_;
         std::vector<Client *>   _clients_;
         std::vector<struct pollfd>     _pollStructs_;

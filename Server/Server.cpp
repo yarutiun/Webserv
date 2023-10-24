@@ -1,13 +1,12 @@
 #include "../webserv.hpp"
 
-Server::Server() {
+Server::Server(int argc, char **argv) {
     std::string path = "configs/default.conf";
 
-//    if (argc > 1)
-//        path = argv[1];
+   if (argc > 1)
+       path = argv[1];
 //    ConfigFileParser configFileParser(path.c_str());
 //    _configs_ = configFile.getConfigs();
-
 }
 
 void Server::launchBinds()
