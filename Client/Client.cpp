@@ -23,6 +23,8 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
         handleGet();
     if (_request_->method() == POST)
         handlePost();
+    else if(_request_->method() == DELETE)
+        handleDelete();
 }
 
 void Client::receive()
@@ -144,7 +146,16 @@ void Client::handlePost()
         // else
             newResponse(201);
     }
+}
 
-
-    
+void Client::handleDelete()
+{
+    if (isDirectory(_request_->updatedURL()))
+		newResponse(405);
+	else if (!resourceExists(_request_->updatedURL()))
+		newResponse(404);
+	else if (remove(_request_->updatedURL().c_str()) == 0)
+		newResponse(204);
+	else
+		newResponse(500);
 }

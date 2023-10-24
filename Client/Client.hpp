@@ -20,6 +20,7 @@ class Client
         const char *getAddr() const;
         void        handleGet();
         void        handlePost();
+        void        handleDelete();
 
     
     private:
