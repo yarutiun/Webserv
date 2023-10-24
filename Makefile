@@ -3,7 +3,8 @@ SRC_DIR=Server Client Configuration Binding Request Response Utils Exceptions
 OBJ_DIR=obj
 SRC = webserv.cpp $(wildcard $(addsuffix /*.cpp,$(SRC_DIR)))
 OBJ= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
-FLAGS= -std=c++98 -Wall -Wextra -Werror
+FLAGS= -std=c++98 -Wall -Wextra -Werror 
+#-g -fsanitize=address
 GPP=g++
 RM=rm -f
 COLOR=\033[36m

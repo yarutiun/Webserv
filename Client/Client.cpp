@@ -1,7 +1,7 @@
 #include "Client.hpp"
 
 
-Client::Client(std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _pollStruct_(pollstruct), _fd_(fd), _address_(address)
+Client::Client(const Configuration &config, std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _config_(config), _pollStruct_(pollstruct), _fd_(fd), _address_(address)
 {
     std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
 }
@@ -19,8 +19,9 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
     if (!_request_)
         newRequest();
     //
-    if ( _request_->method() == GET)
-        handleGet();
+    // std::cout << "METHOD " << _request_->method() << std::endl;
+    // if ( _request_->method() == GET)
+    //     handleGet();
 }
 
 void Client::receive()
@@ -41,7 +42,7 @@ bool Client::outgoingData()
 
 void Client::newRequest()
 {
-    _request_ = new Request(_buffer_, *this); // change later
+    _request_ = new Request(_buffer_, _config_, *this); // change later
     _request_->process();
 }
 
@@ -53,14 +54,14 @@ const char *Client::getAddr() const
 void Client::handleGet()
 {
     //if for cgi here
-    std::cout << _request_->updatedURL() << ">>>>>>>\n";
+    // std::cout << _request_->updatedURL() << ">>>>>>>\n";
 
-    if(isDirectory(_request_->updatedURL()))
-    {
-        std::string stdFile = _request_->updatedURL() + _request_->standardFile();
-        if (resourceExists(stdFile))
-            std::cout << "test test test " << stdFile << " "<< _request_->updatedURL();
-            // newResponse(stdFile);
+    // if(isDirectory(_request_->updatedURL()))
+    // {
+    //     std::string stdFile = _request_->updatedURL() + _request_->standardFile();
+    //     if (resourceExists(stdFile))
+    //         std::cout << "test test test " << stdFile << " "<< _request_->updatedURL();
+    //         // newResponse(stdFile);
 
-    }
+    // }
 }

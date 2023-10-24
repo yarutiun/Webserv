@@ -71,7 +71,7 @@ void Server::acceptNewClients()
                 acceptError(newClientFd);
                     // perror("client fcntl error");
             addPollStruct(newClientFd, POLLIN | POLLHUP);
-            _clients_.push_back(new Client(_pollStruct_, newClientFd, clientAddr));
+            _clients_.push_back(new Client(_configs_[0], _pollStruct_, newClientFd, clientAddr));
         }
         _pollStruct_++; //
     }

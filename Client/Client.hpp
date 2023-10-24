@@ -8,7 +8,7 @@ class Response;
 class Client
 {
     public:
-        Client(std::vector<struct pollfd>::iterator pollStruct, int fd, sockaddr_in address);
+        Client(const Configuration &conf, std::vector<struct pollfd>::iterator pollStruct, int fd, sockaddr_in address);
         int getFd() const;
         void incomingData(std::vector<struct pollfd>::iterator pollStruct);
         void receive();
@@ -19,6 +19,7 @@ class Client
     
     private:
         std::string _buffer_;
+        const Configuration     &_config_;
         std::vector<struct pollfd>::iterator _pollStruct_;
         int _fd_;
         sockaddr_in _address_;

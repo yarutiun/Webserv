@@ -1,6 +1,6 @@
 #include "../webserv.hpp"
 
-Request::Request(std::string& bufferRef, const Config& config, const Client& client):
+Request::Request(std::string& bufferRef, const Configuration& config, const Client& client):
 	buffer(&bufferRef), // non const buffer from Client
 	_config(&config),
 	_activeConfig(&config),
@@ -10,12 +10,12 @@ Request::Request(std::string& bufferRef, const Config& config, const Client& cli
 {}
 
 // delete later
-Request::Request(std::string& bufferRef, const Client& client):
-	buffer(&bufferRef), // non const buffer from Client
-	_client(&client),
-	_cgiRequest(false),
-	_internalScript(no)
-{}
+// Request::Request(std::string& bufferRef, const Client& client):
+// 	buffer(&bufferRef), // non const buffer from Client
+// 	_client(&client),
+// 	_cgiRequest(false),
+// 	_internalScript(no)
+// {}
 
 Request::Request(const Request& src)
 {
@@ -60,7 +60,7 @@ void Request::process()
 	parseRequestHeaders();
 	handleSessionID();
 	trackSession();
-	// selectConfig();
+	selectConfig();
 	// requestError();
 	// updateVars();
 }
@@ -76,6 +76,7 @@ void Request::parseRequestLine()
 		throw ErrCode(400, MYNAME);
 	
 	_method = splitEraseStr(*buffer, " ");
+	std::cout << "WWWWWWWHAT? "<< _method << std::endl;
 	_URL = splitEraseStr(*buffer, " ");
 	_httpProtocol = splitEraseStr(*buffer, "\r\n");
 
@@ -158,49 +159,49 @@ void Request::trackSession()
 	}
 }
 
-// void Request::selectConfig()
-// {
-	// if (_requestedHost.empty())
-	// {
-	// 	std::cout << "Empty 'host' header. Running default config." << std::endl;
-	// 	_activeConfig = _config;
-	// 	_selectedHost = _activeConfig->getNames()[0];
-	// 	return;
-	// }
+void Request::selectConfig()
+{
+	if (_requestedHost.empty())
+	{
+		std::cout << "Empty 'host' header. Running default config." << std::endl;
+		_activeConfig = _config;
+		_selectedHost = _activeConfig->getNames()[0];
+		return;
+	}
 	
-	// if (isStringInVec(_requestedHost, _config->getNames()))
-	// {
-	// 	std::cout << "Host '" << _requestedHost << "' belongs to default config." << std::endl;
-	// 	_activeConfig = _config;
-	// 	_selectedHost = _requestedHost;
-	// 	return;
-	// }
+	if (isStringInVec(_requestedHost, _config->getNames()))
+	{
+		std::cout << "Host '" << _requestedHost << "' belongs to default config." << std::endl;
+		_activeConfig = _config;
+		_selectedHost = _requestedHost;
+		return;
+	}
 
-	// for (size_t i = 0; i < _config->getAltConfigs().size(); ++i)
-	// {
-	// 	if (isStringInVec(_requestedHost, _config->getAltConfigs()[i].getNames()))
-	// 	{
-	// 		std::cout << "Host '" << _requestedHost << "' belongs to alternative config #" << i << "." << std::endl;
-	// 		_activeConfig = &_config->getAltConfigs()[i];
-	// 		_selectedHost = _requestedHost;
-	// 		return;
-	// 	}
-	// }
+	for (size_t i = 0; i < _config->getAltConfigs().size(); ++i)
+	{
+		if (isStringInVec(_requestedHost, _config->getAltConfigs()[i].getNames()))
+		{
+			std::cout << "Host '" << _requestedHost << "' belongs to alternative config #" << i << "." << std::endl;
+			_activeConfig = &_config->getAltConfigs()[i];
+			_selectedHost = _requestedHost;
+			return;
+		}
+	}
 
-	// _activeConfig = _config;
-	// _selectedHost = _activeConfig->getNames()[0];
-// }
+	_activeConfig = _config;
+	_selectedHost = _activeConfig->getNames()[0];
+}
 
-// void Request::requestError()
-// {
-	// if (_httpProtocol != HTTPVERSION)
-	// 	throw ErrCode(505, MYNAME);
+void Request::requestError()
+{
+	if (_httpProtocol != HTTPVERSION)
+		throw ErrCode(505, MYNAME);
 
-	// if (_method != GET && _method != POST && _method != DELETE)
-	// 	throw ErrCode(501, MYNAME);
+	if (_method != GET && _method != POST && _method != DELETE)
+		throw ErrCode(501, MYNAME);
 
-	// if (_contentLength > _activeConfig->getClientMaxBody())
-	// 	throw ErrCode(413, MYNAME);
+	if (_contentLength > _activeConfig->getClientMaxBody())
+		throw ErrCode(413, MYNAME);
 
 	// std::map<std::string, locInfo>::const_iterator it = _activeConfig->getLocations()->find(_directory);
 
@@ -218,24 +219,24 @@ void Request::trackSession()
 	// 	|| (_method == POST && !_locationInfo.post)
 	// 	|| (_method == DELETE && !_locationInfo.delete_)) 
 	// 	throw ErrCode(405, MYNAME);
-// }
+}
 
-// void Request::updateVars()
-// {	
+void Request::updateVars()
+{	
 	// file extension / CGI
 	
-	// std::string extension = fileExtension(_file);
+	std::string extension = fileExtension(_file);
 
-	// if (extension == ".shmang")
-	// {
-	// 	if (_file == "sessionLog.shmang")
-	// 		_internalScript = sessionLog;
-	// 	/*
-	// 	else if (_file == "anotherInternalDynamicContent.shmang")
-	// 		_internalScript = anotherDynCont;
-	// 	...
-	// 	*/
-	// }
+	if (extension == ".shmang")
+	{
+		if (_file == "sessionLog.shmang")
+			_internalScript = sessionLog;
+		/*
+		else if (_file == "anotherInternalDynamicContent.shmang")
+			_internalScript = anotherDynCont;
+		...
+		*/
+	}
 	// else if (_activeConfig->getCgiPaths()->find(extension) != _activeConfig->getCgiPaths()->end())
 	// {
 	// 	_cgiExecPath = _activeConfig->getCgiPaths()->find(extension)->second;
@@ -250,39 +251,39 @@ void Request::trackSession()
 	// 	_cgiOut = out.str();
 	// }
 	
-	// // standard file
+	// standard file
 
-	// _standardFile = _locationInfo.std_file;
-	// if (_standardFile.empty())
-	// 	_standardFile = _activeConfig->getStandardFile();
+	_standardFile = _locationInfo.std_file;
+	if (_standardFile.empty())
+		_standardFile = _activeConfig->getStandardFile();
 	
-	// // if (POST) -> upload_redir
+	// if (POST) -> upload_redir
 
-	// if (_method == POST && !_locationInfo.upload_dir.empty()) // upload_redir supercedes http_redir
-	// {
-	// 	_updatedDirectory = _locationInfo.upload_dir;
+	if (_method == POST && !_locationInfo.upload_dir.empty()) // upload_redir supercedes http_redir
+	{
+		_updatedDirectory = _locationInfo.upload_dir;
 
-	// 	if (!resourceExists(prependRoot(_updatedDirectory)))
-	// 		throw ErrorCode(500, MYNAME);
+		if (!resourceExists(prependRoot(_updatedDirectory)))
+			throw ErrCode(500, MYNAME);
 		
-	// 	if (_activeConfig->getLocations()->find(_updatedDirectory) == _activeConfig->getLocations()->end())
-	// 		throw ErrorCode(403, MYNAME); // upload_redir also has to be set in the config file
+		// if (_activeConfig->getLocations()->find(_updatedDirectory) == _activeConfig->getLocations()->end())
+		// 	throw ErrCode(403, MYNAME); // upload_redir also has to be set in the config file
 		
-	// 	_locationInfo = _activeConfig->getLocations()->find(_updatedDirectory)->second; // upload_redir changes locInfo
-	// }
+		// _locationInfo = _activeConfig->getLocations()->find(_updatedDirectory)->second; // upload_redir changes locInfo
+	}
 
-	// // else -> http_redir
+	// else -> http_redir
 
-	// else if (!_locationInfo.http_redir.empty())
-	// 	_updatedDirectory = _locationInfo.http_redir; // http_redir does not change locInfo
-	// else
-	// 	_updatedDirectory = _directory;
+	else if (!_locationInfo.http_redir.empty())
+		_updatedDirectory = _locationInfo.http_redir; // http_redir does not change locInfo
+	else
+		_updatedDirectory = _directory;
 
-	// // finalize updated vars
+	// finalize updated vars
 
-	// _updatedDirectory = prependRoot(_updatedDirectory);
-	// _updatedURL = _updatedDirectory + _file;
-// }
+	_updatedDirectory = prependRoot(_updatedDirectory);
+	_updatedURL = _updatedDirectory + _file;
+}
 
 std::string Request::prependRoot(const std::string& path) const
 {
@@ -329,31 +330,31 @@ void Request::whoIsI() const
 				<< separator << std::endl;
 }
 
-// const Config*	Request::activeConfig() const { return _activeConfig; }
+const Configuration*	Request::activeConfig() const { return _activeConfig; }
 
 const std::string& Request::method() const { return _method; }
 
-// const std::string& Request::URL() const { return _URL; }
+const std::string& Request::URL() const { return _URL; }
 
-// const std::string& Request::httpProt() const { return _httpProtocol; }
+const std::string& Request::httpProt() const { return _httpProtocol; }
 
-// const std::string& Request::queryString() const { return _queryString; }
+const std::string& Request::queryString() const { return _queryString; }
 
-// const std::map<std::string, std::string>* Request::headers() const { return &_headers; }
+const std::map<std::string, std::string>* Request::headers() const { return &_headers; }
 
-// const std::map<std::string, std::string>* Request::cookies() const { return &_cookies; }
+const std::map<std::string, std::string>* Request::cookies() const { return &_cookies; }
 
-// const std::string& Request::requestedHost() const { return _requestedHost; }
+const std::string& Request::requestedHost() const { return _requestedHost; }
 
-// const std::string& Request::selectedHost() const { return _selectedHost; }
+const std::string& Request::selectedHost() const { return _selectedHost; }
 
-// size_t Request::contentLength() const { return _contentLength; }
+size_t Request::contentLength() const { return _contentLength; }
 
-// const std::string& Request::contentType() const { return _contentType; }
+const std::string& Request::contentType() const { return _contentType; }
 
-// const std::string& Request::directory() const { return _directory; }
+const std::string& Request::directory() const { return _directory; }
 
-// const std::string& Request::file() const { return _file; }
+const std::string& Request::file() const { return _file; }
 
 bool Request::dirListing() const
 {
@@ -367,19 +368,19 @@ bool Request::dirListing() const
 		return true;
 }
 
-// bool Request::cgiRequest() const { return _cgiRequest; }
+bool Request::cgiRequest() const { return _cgiRequest; }
 
-// const std::string& Request::cgiExecPath() const { return _cgiExecPath; }
+const std::string& Request::cgiExecPath() const { return _cgiExecPath; }
 
-// const std::string& Request::cgiIn() const { return _cgiIn; }
+const std::string& Request::cgiIn() const { return _cgiIn; }
 
-// const std::string& Request::cgiOut() const { return _cgiOut; }
+const std::string& Request::cgiOut() const { return _cgiOut; }
 
-// const dynCont& Request::internalScript() const { return _internalScript; }
+const dynCont& Request::internalScript() const { return _internalScript; }
 
-// bool Request::setCookie() const { return _setCookie; }
+bool Request::setCookie() const { return _setCookie; }
 
-// const std::string& Request::sessionID() const { return _sessionID; }
+const std::string& Request::sessionID() const { return _sessionID; }
 
 const std::string& Request::standardFile() const { return _standardFile; }
 
@@ -387,17 +388,19 @@ const std::string& Request::updatedDir() const { return _updatedDirectory; }
 
 const std::string& Request::updatedURL() const { return _updatedURL; }
 
-// const locInfo* Request::locationInfo() const { return &_locationInfo; }
+const locInfo* Request::locationInfo() const { return &_locationInfo; }
 
-// std::string Request::statusPagePath(int code) const
-// {
-// 	// std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
+std::string Request::statusPagePath(int code) const
+{
+	/////// 
+	(void)code;
+	// std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
 	
-// 	// if (codePath == _activeConfig->getStatusPagePaths()->end())
-// 	// 	return "";
-// 	// return prependRoot(codePath->second);
-// }
+	// if (codePath == _activeConfig->getStatusPagePaths()->end())
+		return "";
+	// return prependRoot(codePath->second);
+}
 
-// // const std::string& Request::root() const { 
-// //     return _activeConfig->getRoot(); 
-// // }
+const std::string& Request::root() const { 
+    return _activeConfig->getRoot(); 
+}
