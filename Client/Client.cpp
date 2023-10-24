@@ -128,6 +128,23 @@ void Client::handlePost()
         file.open(path.c_str(), std::ios::binary | std::ios::trunc);
         _append_ = true;
     }
+    if (!file)
+    {
+        file.close();
+        throw ErrCode(500, "MYNAME"); // change later;
+    }
+    file.write(_buffer_.c_str(), _buffer_.size());
+    _bytesWritten_ += _buffer_.size();
+    _buffer_.clear();
+    file.close();
+    if (_bytesWritten_ >= _request_->contentLength())
+    {
+        // if (_request_->cgiRequest())
+        //     handleCGI();
+        // else
+            newResponse(201);
+    }
+
 
     
 }

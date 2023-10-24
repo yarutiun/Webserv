@@ -31,6 +31,7 @@ class Client
         Request     *_request_;
         Response    *_response_;
         bool       _append_;
+        size_t      _bytesWritten_;
 };
 
 #endif
