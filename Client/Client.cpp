@@ -19,9 +19,8 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
     if (!_request_)
         newRequest();
     //
-    // std::cout << "METHOD " << _request_->method() << std::endl;
-    // if ( _request_->method() == GET)
-    //     handleGet();
+    if ( _request_->method() == GET)
+        handleGet();
 }
 
 void Client::receive()
@@ -54,14 +53,21 @@ const char *Client::getAddr() const
 void Client::handleGet()
 {
     //if for cgi here
-    // std::cout << _request_->updatedURL() << ">>>>>>>\n";
 
-    // if(isDirectory(_request_->updatedURL()))
-    // {
-    //     std::string stdFile = _request_->updatedURL() + _request_->standardFile();
-    //     if (resourceExists(stdFile))
-    //         std::cout << "test test test " << stdFile << " "<< _request_->updatedURL();
-    //         // newResponse(stdFile);
+    if(isDirectory(_request_->updatedURL()))
+    {
+        std::string stdFile = _request_->updatedURL() + _request_->standardFile();
+        if (resourceExists(stdFile))
+            newResponse(stdFile);
+    }
+}
 
-    // }
+
+void Client::newResponse(std::string &stdFile)
+{
+    if (_response_)
+        delete _response_;
+    (void)stdFile;
+    // _response_ = new Response(_config_, *this, stdFile);
+    // _response_->process();
 }

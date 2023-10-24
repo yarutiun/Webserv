@@ -14,6 +14,7 @@ class Client
         void receive();
         bool outgoingData();
         void newRequest();
+        void newResponse(std::string &sendPath);
         const char *getAddr() const;
         void        handleGet();
     
@@ -21,10 +22,10 @@ class Client
         std::string _buffer_;
         const Configuration     &_config_;
         std::vector<struct pollfd>::iterator _pollStruct_;
-        int _fd_;
+        int         _fd_;
         sockaddr_in _address_;
-        Request *_request_;
-        // Response *_response_;
+        Request     *_request_;
+        Response    *_response_;
 };
 
 #endif

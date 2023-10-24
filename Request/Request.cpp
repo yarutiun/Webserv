@@ -61,8 +61,8 @@ void Request::process()
 	handleSessionID();
 	trackSession();
 	selectConfig();
-	// requestError();
-	// updateVars();
+	requestError();
+	updateVars();
 }
 
 std::string Request::prependClassName(std::string function)
@@ -76,7 +76,6 @@ void Request::parseRequestLine()
 		throw ErrCode(400, MYNAME);
 	
 	_method = splitEraseStr(*buffer, " ");
-	std::cout << "WWWWWWWHAT? "<< _method << std::endl;
 	_URL = splitEraseStr(*buffer, " ");
 	_httpProtocol = splitEraseStr(*buffer, "\r\n");
 
@@ -288,8 +287,8 @@ void Request::updateVars()
 std::string Request::prependRoot(const std::string& path) const
 {
 	if (path.find('/') == 0)
-        return "hi line 289";
-		// return _activeConfig->getRoot() + path.substr(1);
+        // return "hi line 289";
+		return _activeConfig->getRoot() + path.substr(1);
 	else
 		return path;
 }

@@ -1,6 +1,7 @@
 #include "webserv.hpp"
 
 volatile sig_atomic_t signum = 0;
+std::map<std::string, std::string>	mimeTypes = initMimeTypesMap();
 
 int main(int argc, char **argv)
 {

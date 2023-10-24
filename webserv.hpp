@@ -8,6 +8,8 @@
 #include <map>
 #include <vector>
 #include <csignal>
+#include <sstream>
+
 
 typedef struct locationInformation
 {
@@ -54,6 +56,7 @@ class Response;
 #include "Utils/utils.hpp"
 //global variable//
 extern volatile sig_atomic_t				signum;
+extern std::map<std::string, std::string>	mimeTypes;
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -72,6 +75,9 @@ class Binding;
 #include "Client/Client.hpp"
 class Client;
 
+#include "Response/File.Response.hpp"
+class File;
+
 
 
 
@@ -85,7 +91,6 @@ class Client;
 
 #include <fstream>
 
-#include <sstream>
 
 
 #include <sys/stat.h>

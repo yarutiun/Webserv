@@ -18,6 +18,9 @@ std::string	splitEraseTrimChars(std::string&, const std::string&);
 bool isAlnumStrPlus(const std::string&, const std::string&);
 std::vector<std::string> splitEraseStrVec(std::string&, const std::string&, const std::string&);
 std::string getInstruction(std::string&);
+size_t fileSize(const std::string& filePath);
+std::string getMimeType(const std::string& filePath);
+std::map<std::string, std::string> initMimeTypesMap();
 
 
 #endif
