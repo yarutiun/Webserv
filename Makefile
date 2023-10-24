@@ -1,5 +1,5 @@
 NAME=webserv
-SRC_DIR=Server Client Config Binding Request Response Utils Exceptions
+SRC_DIR=Server Client Configuration Binding Request Response Utils Exceptions
 OBJ_DIR=obj
 SRC = webserv.cpp $(wildcard $(addsuffix /*.cpp,$(SRC_DIR)))
 OBJ= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
