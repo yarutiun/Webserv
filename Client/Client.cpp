@@ -18,6 +18,9 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
     // std::cout << "Client " << _fd_ << " says: " << _buffer_ << std::endl;
     if (!_request_)
         newRequest();
+    //
+    if ( _request_->method() == GET)
+        handleGet();
 }
 
 void Client::receive()
@@ -45,4 +48,19 @@ void Client::newRequest()
 const char *Client::getAddr() const
 {
     return(inet_ntoa(_address_.sin_addr));
+}
+
+void Client::handleGet()
+{
+    //if for cgi here
+    std::cout << _request_->updatedURL() << ">>>>>>>\n";
+
+    if(isDirectory(_request_->updatedURL()))
+    {
+        std::string stdFile = _request_->updatedURL() + _request_->standardFile();
+        if (resourceExists(stdFile))
+            std::cout << "test test test " << stdFile << " "<< _request_->updatedURL();
+            // newResponse(stdFile);
+
+    }
 }

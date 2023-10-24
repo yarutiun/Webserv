@@ -15,6 +15,7 @@ class Client
         bool outgoingData();
         void newRequest();
         const char *getAddr() const;
+        void        handleGet();
     
     private:
         std::string _buffer_;

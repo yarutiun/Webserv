@@ -210,6 +210,7 @@ std::string getHttpMsg(int code)
 
 bool resourceExists(const std::string& path)
 {
+	std::cout << "THE PATH IS? =" << path << std::endl;
 	if (path.empty())
 		return false;
 	
