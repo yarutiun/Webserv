@@ -21,19 +21,29 @@ class Client
         void        handleGet();
         void        handlePost();
         void        handleDelete();
+        bool        handleCGI();
+        void        launchChild();
+        void        makeEnv();
 
     
     private:
-        std::string _buffer_;
-        const Configuration     &_config_;
-        std::vector<struct pollfd>::iterator _pollStruct_;
-        int         _fd_;
-        sockaddr_in _address_;
-        Request     *_request_;
-        Response    *_response_;
-        bool       _append_;
-        size_t      _bytesWritten_;
-        bool        _cgiInProgress_;
+        std::string                             _buffer_;
+        const Configuration                     &_config_;
+        std::vector<struct pollfd>              _pollStructs_;
+        std::vector<struct pollfd>::iterator    _pollStruct_;
+        int                                     _fd_;
+        sockaddr_in                             _address_;
+        Request                                 *_request_;
+        Response                                *_response_;
+        bool                                    _append_;
+        size_t                                  _bytesWritten_;
+        bool                                    _cgiInProgress_;
+        std::vector<std::string>                _argVVecStr_;
+        std::vector<char*>                      _argVVec_;
+        std::vector<std::string>                _envVecStr_;
+        std::vector<char*>                      _envVec_;
+        pid_t                                   _pid_;
+        time_t                                  _time_;
 };
 
 #endif

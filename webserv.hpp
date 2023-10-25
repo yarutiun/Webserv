@@ -99,6 +99,8 @@ class DynContent;
 #include "Exceptions/ErrCode.hpp"
 class ErrCode;
 
-#include <dirent.h>   // For opendir and other directory-related functions
-
+#include<dirent.h>   // For opendir and other directory-related functions
+#include<unistd.h> // fork, execve, close, exit..
+#include<ctime>
+#include<cstdlib> // for EXIT_FAILURE
 #endif
