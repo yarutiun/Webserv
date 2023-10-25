@@ -39,6 +39,9 @@ class Client
         bool        _cgiInProgress_;
         std::vector<std::string>    _argVVecStr_;
         std::vector<char*>          _argVVec_;
+        std::vector<std::string>    _envVecStr_;
+        std::vector<char*>          _envVec_;
+        pid_t                       _pid_;
 };
 
 #endif

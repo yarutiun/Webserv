@@ -171,11 +171,17 @@ bool    Client::handleCGI()
         _pollStruct_->events = POLLOUT | POLLHUP;
         launchChild();
     }
+    return 1;
 }
 
 void    Client::launchChild()
 {
     makeEnv();
+    if ((_pid_=fork()) == -1)
+    {
+        perror("fork error");
+        throw ErrCode(500, "MYNAME"); //
+    }
 }
 
 void    Client::makeEnv()
@@ -185,6 +191,35 @@ void    Client::makeEnv()
     for (size_t i = 0; i < _argVVec_.size(); ++i)
         _argVVec_.push_back(const_cast<char *>(_argVVecStr_[i].c_str())); //wht ?
     _argVVec_.push_back(NULL);
+    std::stringstream   contentLength, port;
+    std::string     cookie, ipAddress, userAgent;
+    contentLength << _request_->contentLength();
+	// port << ntohs(_request->activeConfig()->getPort());
 
+	if (_request_->headers()->find("cookie") != _request_->headers()->end())
+		cookie = _request_->headers()->find("cookie")->second;
+
+	ipAddress = inet_ntoa(_address_.sin_addr);
+
+	if (_request_->headers()->find("user-agent") != _request_->headers()->end())
+		userAgent = _request_->headers()->find("user-agent")->second;
+	
+	_envVecStr_.push_back("SCRIPT_NAME=" + _request_->file());
+	_envVecStr_.push_back("QUERY_STRING=" + _request_->queryString());
+	_envVecStr_.push_back("REQUEST_METHOD=" + _request_->method());
+	_envVecStr_.push_back("CONTENT_TYPE=" + _request_->contentType());
+	_envVecStr_.push_back("CONTENT_LENGTH=" + contentLength.str());
+	_envVecStr_.push_back("HTTP_COOKIE=" + cookie);
+	_envVecStr_.push_back("REMOTE_ADDR=" + ipAddress);
+	_envVecStr_.push_back("SERVER_NAME=" + _request_->selectedHost());
+	_envVecStr_.push_back("SERVER_PORT=" + port.str());
+	_envVecStr_.push_back("PATH_INFO=" + _request_->updatedURL());
+	_envVecStr_.push_back("HTTP_USER_AGENT=" + userAgent);
+	_envVecStr_.push_back("INPUT_FILE=" + _request_->cgiIn());
+	_envVecStr_.push_back("OUTPUT_FILE=" + _request_->cgiOut());
+
+	for (size_t i = 0; i < _envVecStr_.size(); ++i)
+		_envVec_.push_back(const_cast<char*>(_envVecStr_[i].c_str()));
+	_envVec_.push_back(NULL);
 
 }
