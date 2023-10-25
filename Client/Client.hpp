@@ -21,6 +21,9 @@ class Client
         void        handleGet();
         void        handlePost();
         void        handleDelete();
+        bool        handleCGI();
+        void        launchChild();
+        void        makeEnv();
 
     
     private:
@@ -34,6 +37,8 @@ class Client
         bool       _append_;
         size_t      _bytesWritten_;
         bool        _cgiInProgress_;
+        std::vector<std::string>    _argVVecStr_;
+        std::vector<char*>          _argVVec_;
 };
 
 #endif

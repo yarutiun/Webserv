@@ -163,3 +163,28 @@ void Client::handleDelete()
 	else
 		newResponse(500);
 }
+
+bool    Client::handleCGI()
+{
+    if (!_cgiInProgress_)
+    {
+        _pollStruct_->events = POLLOUT | POLLHUP;
+        launchChild();
+    }
+}
+
+void    Client::launchChild()
+{
+    makeEnv();
+}
+
+void    Client::makeEnv()
+{
+    _argVVecStr_.push_back(_request_->cgiExecPath());
+    _argVVecStr_.push_back(_request_->updatedURL());
+    for (size_t i = 0; i < _argVVec_.size(); ++i)
+        _argVVec_.push_back(const_cast<char *>(_argVVecStr_[i].c_str())); //wht ?
+    _argVVec_.push_back(NULL);
+
+
+}
