@@ -171,6 +171,10 @@ bool    Client::handleCGI()
         _pollStruct_->events = POLLOUT | POLLHUP;
         launchChild();
     }
+
+    //
+    //
+    //
     return 1;
 }
 
@@ -181,6 +185,19 @@ void    Client::launchChild()
     {
         perror("fork error");
         throw ErrCode(500, "MYNAME"); //
+    }
+    if (_pid_ == 0)
+    {
+        for (size_t i = 0; i < _pollStructs_.size(); ++i)
+            close(_pollStructs_[i].fd);
+        execve(_request_->cgiExecPath().c_str(), _argVVec_.data(), _envVec_.data());
+        perror("execve error");
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        _time_ = time(NULL);
+        _cgiInProgress_ = true;
     }
 }
 
