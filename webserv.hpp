@@ -46,8 +46,8 @@ class Server;
 #include "Request/Request.hpp"
 class Request;
 
-#include "Response/Response.hpp"
-class Response;
+// #include "Response/Response.hpp"
+// class Response;
 
 #include "defines.hpp"
 #include <sys/poll.h>
@@ -75,11 +75,11 @@ class Binding;
 #include "Client/Client.hpp"
 class Client;
 
-#include "Response/File.Response.hpp"
-class File;
+// #include "Response/File.Response.hpp"
+// class File;
 
-#include"Response/DynContent.Response.hpp"
-class DynContent;
+// #include"Response/DynContent.Response.hpp"
+// class DynContent;
 
 
 

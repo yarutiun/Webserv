@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/styles.css">
+    <title>Welcome to Upload all u want</title>
+</head>
+<body>
+    <div class="background-image"></div>
+    <div class="content">
+        <h1>Welcome to Upload All You Want</h1>
+
+
+<!--    POST    -->
+        <div class="form-section"><br><br>
+            <h3> Upload File</h3>
+            <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" id="everything" name="evr" class="file-input">
+                <button type="submit" class="submit-button">Upload</button>
+            </form>
+        </div>
+
+
+
+<!--    CGI    -->
+        <div class="form-section"><br><br>
+            <h3>cgi</h3>
+            <button onclick="location.href='cgi.html'">CGI-test</button>
+        </div>
+
+
+
+<!--    DELETE    -->
+        <div class="form-section"><br><br>
+            <h3>Delete File</h3>
+            <form id="deleteForm" class="delete-form">
+                <label for="filePath" class="file-label">Enter File:</label>
+                <input type="text" id="filePath" name="filePath" class="file-input" required>
+                <button type="button" id="deleteButton" class="delete-button">Delete</button>
+                <p id="resultMessage" class="result-message"></p>
+            </form>
+            <script src="scripts/deleteScript.js"></script>
+        </div>
+
+
+
+<!--    COOKIES    -->
+        <div class="form-section"><br><br>
+            <h3>Change ur name</h3>
+            <form action="/cookie-set" method="post">
+                <label for="text-input">Text:</label>
+                <input type="text" id="text-input" name="textData">
+                <button onclick="goToIndexPage()">submit</button>
+            </form>
+        </div>
+
+
+<!--    PUT    -->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+        <!--test that proofs that UNKNOWN requests should not result in a crash [PUT] -->
+        <!-- <div class="form-section"><br><br><h3>Test PUT method</h3>
+        <input type="text" id="data" class="text-input" placeholder="Enter data">
+        <button id="submitButton" class="submit-button">Submit PUT Request</button><script>
+        document.getElementById("submitButton").addEventListener("click", function () {const data = document.getElementById("data").value;
+        // Make a PUT request using the Fetch API
+        fetch(`http://${hostname}:${port}/${encodeURIComponent(filePath)}`, {method: "PUT", body: JSON.stringify({ data }), // Convert data to JSON
+        headers: {"Content-Type": "application/json",},})
+        .then((response) => response.json())
+        .then((result) => {console.log("Response from server:", result);})
+        .catch((error) => {console.error("Error:", error);});});
+        </script>
+        </div> -->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+    </div>
+</body>
+</html>

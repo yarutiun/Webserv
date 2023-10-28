@@ -1,0 +1,171 @@
+body {
+	background-color: black;
+	color: white;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0% 1% 0% 1%;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+}
+
+header {
+	margin: 0;
+	padding: 1% 0 0 0;
+	text-align: center;
+	width: 100%;
+	position: relative;
+	z-index: 2;
+}
+
+.text_content_left {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	align-items: center;
+	width: 50%;
+	z-index: 2;
+}
+
+.content_group_01 {
+	gap: 0px;	
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	align-items: left;
+	width: 50%;
+	z-index: 2;
+}
+
+.content_subgroup_01 {
+	padding: 10px;
+	gap: 30px;	
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+	text-align: center;
+	align-items: center;
+	width: 50%;
+	z-index: 2;
+}
+
+h1 {
+	font-size: 96px;
+}
+
+h2 {
+	font-size: 64px;
+}
+
+p, ul {
+	font-size: 32px;
+	text-align: left;
+	line-height: 1.1;
+}
+
+logtext {
+	font-size: 16px;
+	line-height: 1.5;
+	margin-right: 300px;
+}
+
+tiny {
+	font-size: 12px;
+	text-align: left;
+	line-height: 1.1;
+}
+
+.img_float_right {
+	text-align: right;
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: 100%;
+	z-index: 1;
+	margin-left: auto;
+}
+
+a:link {
+	color: #737373;
+}
+
+a:visited {
+	color: #737373;
+}
+
+a:hover {
+	color: #ff0000;
+}
+
+a:active {
+	color: #ff0000;
+}
+
+button {
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+
+.button_01 {
+	background-color: #007bff; /* Change this to your desired background color */
+	color: #ffffff; /* Change this to your desired text color */
+	padding: 10px 20px;
+	border-radius: 5px;
+	font-size: 16px;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	width: 250px;
+}
+
+.button_01:hover {
+	background-color: #0056b3; /* Change this to your desired hover background color */
+}
+
+input {
+	border: none;
+	outline: none;
+}
+
+.input-container_01 {
+	display: inline-block;
+	background-color: blue;
+	border-radius: 5px;
+	padding: 5px;
+	height: auto;
+	width: 250px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;	
+}
+
+.input_01 {
+	display: flex;
+	height: 50px;
+	width: 250px;
+	background-color: rgb(84, 161, 255);
+	padding: 0px;
+	border: none;
+	font-size: 20px;
+	color: #cbcbcb;
+	text-align: center;
+	align-items: center;
+}
+
+.input_01::placeholder {
+	color: #cdcdcd;
+}
+  
+.input_01:focus {
+	border: none;
+	outline: none;
+/* 	background-color: #e0e0e0; */
+}
+
+.logContainer {
+	white-space: pre;
+	flex: 1;
+	position: relative;
+	z-index: 2;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CGI Example</title>
+</head>
+<body>
+	<h1>GET py</h1>
+	<h2>Enter your name:</h2>
+	<form action="cgi-bin/simple.py" method="get">
+		<input type="text" name="name">
+		<input type="submit" value="Submit">
+	</form>
+	<h1>POST py</h1>
+	<h2>Enter your name:</h2>
+	<form action="/cgi-bin/simple.py" method="post"> <!--  -->
+		<input type="text" name="name">
+		<input type="submit" value="Submit">
+	</form>
+	<h1>GET pl</h1>
+	<h2>Enter your name:</h2>
+	<form action="cgi-bin/simple.pl" method="get">
+		<input type="text" name="name">
+		<input type="submit" value="Submit">
+	</form>
+	<h1>POST pl</h1>
+	<h2>Enter your name:</h2>
+	<form action="/cgi-bin/simple.pl" method="post"> <!--  -->
+		<input type="text" name="name">
+		<input type="submit" value="Submit">
+	</form>
+</body>
+</html>

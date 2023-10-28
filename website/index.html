@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Test Website for 42 Project: webserv - main</title>
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<link rel="icon" href="favicon.ico" type="image/x-icon"/>
+</head>
+
+<body>
+	<header>
+		<h1>webserv testing</h1>
+	</header>
+	<div class="text_content_left">
+		<h2>Test stuff by such fun activities as:</h2>
+		<ul>
+			<li>entering text to upload</li>
+			<li>choosing a file to upload</li>
+			<li>visiting the cookie tracking log</li>
+			<li>checking out directory listing</li>
+			<li>going to the CGI testing page<tiny> via a http redirection omg!</tiny> </li>
+			<li>deleting your text again</li>
+			
+		</ul>
+		<br>
+		<br>
+		<div content_group_01>
+
+			<div class="content_subgroup_01">
+				<div class="input-container_01">
+					<input type="text" id="input" name="input" class="input_01" placeholder="Enter your text">
+					<button class="button_01" onclick="submitText()">Submit text</button>
+				</div>
+				<div class="input-container_01">
+					<input type="file" id="image" name="image" class="input_01">
+					<button class="button_01" onclick="submitImage()">Submit image</button>
+				</div>
+			</div>
+
+			<div class="content_subgroup_01">	
+				<div class="input-container_01">
+					<a href="/sessionLog.shmang">
+						<button class="button_01">Go to session log</button>
+					</a>
+				</div>
+				<div class="input-container_01">
+					<a href="/api/">
+						<button class="button_01">Check out dirlisting</button>
+					</a>
+				</div>
+			</div>
+
+			<div class="content_subgroup_01">	
+				<div class="input-container_01">
+					<a href="../fakeLocationThatDoesntExist/">
+						<button class="button_01">Go to CGI page</button>
+					</a>
+				</div>
+				<div class="input-container_01">
+					<a href="#">
+						<button class="button_01" onclick="deleteText()">Delete the text again</button>
+					</a>
+				</div>
+			</div>
+
+			<div class="content_subgroup_01">	
+				<div class="input-container_01">
+					<a href="/CGI/script.py">
+						<button class="button_01">Send CGI Get request (py)</button>
+					</a>
+				</div>
+				<div class="input-container_01">
+					<a href="/CGI/loop.py">
+						<button class="button_01">Start an infinite loop py script <br><tiny>Open another tab and send parallel requests before the child hits its timeout!</tiny></button>
+					</a>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+	<img class="img_float_right" src="/img/Cat_cutout_01.png">
+	<img src="/img/dogeLurk.png" alt="dogeLurk" style="width: 300px; height: auto; position: fixed; bottom: 0; left: 100; z-index: 5;">
+
+	<script>
+		const textEndpointUrl = '/api/text.txt';
+		const fileBaseEndpointUrl = '/api/';
+
+		function submitText() {
+			const input = document.getElementById('input').value;
+			sendData(input, textEndpointUrl);
+		}
+
+		function submitImage() {
+			const fileInput = document.getElementById('image');
+			const file = fileInput.files[0];
+			sendData(file, fileBaseEndpointUrl + encodeURIComponent(file.name));
+		}
+
+		function sendData(data, endpointUrl) {
+			const xhr = new XMLHttpRequest();
+			xhr.open('POST', endpointUrl, true);
+			xhr.onload = function() {
+				if (this.status === 200) {
+					document.getElementById('output').innerHTML = this.responseText;
+				}
+			};
+
+			if (data instanceof File) {
+				xhr.setRequestHeader('Content-Type', data.type);
+				xhr.setRequestHeader('X-File-Name', data.name);
+				xhr.send(data);
+			} else {
+				xhr.setRequestHeader('Content-Type', 'text/plain');
+				xhr.setRequestHeader('X-File-Name', 'text.txt');
+				xhr.send(data);
+			}
+		}
+
+		function deleteText() {
+			const textDiv = document.getElementById('textToDelete');
+			const xhr = new XMLHttpRequest();
+			xhr.open('DELETE', '/api/upload/text.txt', true);
+			/* xhr.onload = function() {
+				if (this.status === 200) {
+					textDiv.innerHTML = ''; // Remove the text from the DOM
+				}
+			}; */
+ 			xhr.send();
+		}
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../images/good_boi.jpeg);
+    background-size: cover;
+    opacity: 0.2; /* 20% transparency */
+    z-index: -1; /* Behind the content */
+}
+
+.content {
+    position: relative;
+    z-index: 1; /* Above the background */
+    /*text-align: center;*/
+    padding: 20px;
+    color: black;
+}
+
+.submit-button{
+
+    background-color: #aec587;
+    color: #3d4d22;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    border-radius: 5px;
+}
+.delete-button {
+    background-color: #c28989;
+    color: #650202;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    border-radius: 5px;
+}
+
+.submit-button:hover{
+    background-color: darkolivegreen;
+    color: #aec587;
+
+}
+.delete-button:hover {
+    background-color: #650202;
+    color: #c28989;
+}
+
+/*UPLOAD FILE*/
+.upload-form {
+    width: 50%; /* Adjust the width */
+    padding: 10px; /* Add some padding for better appearance */
+    /*border: 10px solid #ccc;*/
+    border-radius: 10px; /* Adjust the border radius */
+    font-size: 15px; /* Adjust the font size */
+}
+
+.file-input-upload {
+    width: 38%; /* Adjust the width */
+    padding: 10px; /* Add some padding for better appearance */
+    /*!*border: 1px solid #ccc;*!*/
+    border-radius: 30px; /* Adjust the border radius */
+    font-size: 13px; /* Adjust the font size */
+}
+
+
+/*DELETE FILE*/
+.delete-form{
+    width: 50%; /* Adjust the width */
+    padding: 10px; /* Add some padding for better appearance */
+    /*border: 10px solid #ccc;*/
+    border-radius: 10px; /* Adjust the border radius */
+    font-size: 15px; /* Adjust the font size */
+}
+.file-label {
+    /*width: 10%; !* Adjust the width *!*/
+    /*padding: 10px; !* Add some padding for better appearance *!*/
+    /*!*border: 1px solid #ccc;*!*/
+    /*border-radius: 10px; !* Adjust the border radius *!*/
+    font-size: 15px; /* Adjust the font size */
+}
+.file-input-delete{
+    width: 28%; /* Adjust the width */
+    padding: 5px; /* Add some padding for better appearance */
+    /*border: 1px solid #ccc;*/
+    border-radius: 10px; /* Adjust the border radius */
+    font-size: 10px; /* Adjust the font size */
+}
+
+
+.result-message{
+    width: 70%; /* Adjust the width */
+    padding: 10px; /* Add some padding for better appearance */
+    /*border: 1px solid #ccc;*/
+    border-radius: 10px; /* Adjust the border radius */
+    font-size: 15px; /* Adjust the font size */
+}
+
+
+
+
+.custom-gohome-button{
+    background-color: #abaaaa;
+    color: #2d2d2d;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    border-radius: 4px;
+}
+.custom-gohome-button:hover{
+    background-color: #2d2d2d;
+    color: #abaaaa;
+}
+
+/* Style for the container holding the button and text */
+.button-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Space between the text and button */
+.button-container span {
+    margin-right: 10px;
+}
