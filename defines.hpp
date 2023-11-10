@@ -105,3 +105,10 @@
 # define E_S_NOBINDINGS		"Error: Server: No listening sockets bound."
 
 # define I_S_BINDINGS		"Info: Server: " << _bindings.size() << (_bindings.size() == 1 ? " listening socket" : " listening sockets") << " successfully bound."
+
+
+// close messages
+# define CLOSE_POLLHUP		"POLLHUP."
+# define CLOSE_NODATA		"No data received."
+# define CLOSE_EXCPT		"CloseConnection exception caught."
+# define CLOSE_DONE			"Done sending data."

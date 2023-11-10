@@ -19,7 +19,7 @@ class Server{
         bool pollhup();
         bool pollin();
         bool pollout();
-        void closeClientConnection();
+        void closeClientConnection(std::string msg);
         void acceptError(int newClientFd);
         void shutdown();
 

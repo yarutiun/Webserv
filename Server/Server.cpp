@@ -106,8 +106,8 @@ void Server::handleClients()
     _pollStruct_ = _pollStructs_.begin() + _binds_.size();
     while(_pollStruct_ != _pollStructs_.end())
     {
-        try{
-
+        try
+        {
         // std::cout << "handling client" << std::endl;
             _client_ = getClientByFd(_pollStruct_->fd);
             if (pollhup())
@@ -121,11 +121,14 @@ void Server::handleClients()
             std::cerr << e.what() << std::endl;
             (*_client_)->sendStatusPage(e.getCode());
         }
-        _pollStruct_++;
+        catch(const std::exception &e)
+        {
+            std::cerr << e.what() << std::endl;
+            closeClientConnection(CLOSE_EXCPT);
+            continue;
+        }
+        ++_pollStruct_;
     }
-    //try - catch
-
-
 }
 
 void Server::addPollStruct(int fd, short events)
@@ -158,16 +161,16 @@ bool Server::pollhup()
     if (_pollStruct_->revents & POLLHUP)
     {
         std::cout << "Client " << _pollStruct_->fd << " disconnected" << std::endl;
-        closeClientConnection();
+        closeClientConnection(CLOSE_POLLHUP);
         return true;
     }
     return false;
 
 }
 
-void Server::closeClientConnection() // add message to this function
+void Server::closeClientConnection(std::string msg)
 {
-    std::cout << "Closing Client on fd " << _pollStruct_->fd << std::endl;
+    std::cout << "Closing Client on fd " << _pollStruct_->fd << ": " << msg << std::endl;
     close(_pollStruct_->fd);
     _pollStruct_ = _pollStructs_.erase(_pollStruct_); // erase returns the next valid position
     delete *_client_;
@@ -190,7 +193,7 @@ bool    Server::pollout()
     if (_pollStruct_->revents & POLLOUT)
     {
         if ((*_client_)->outgoingData())
-            return (closeClientConnection(), true);
+            return (closeClientConnection(CLOSE_DONE), true);
         ++_pollStruct_;
         return true;
     }
