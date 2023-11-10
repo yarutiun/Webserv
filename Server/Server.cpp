@@ -145,11 +145,11 @@ std::vector<Client *>::iterator Server::getClientByFd(int fd)
 {
     std::vector<Client *>::iterator it = _clients_.begin();
     while (it != _clients_.end() && (*it)->getFd() != fd)
-        it++;
+        ++it;
     if (it == _clients_.end())
     {
         std::cerr << "Client not found" << std::endl;
-        throw std::runtime_error("Client not found"); //
+        throw std::runtime_error(__FUNCTION__);
     }
     return it;
 }
@@ -177,6 +177,8 @@ void Server::closeClientConnection(std::string msg)
     _clients_.erase(_client_);
 }
 
+//It checks if a client's file descriptor is ready for input (reading), and if it is, it reads incoming data from the 
+//client and increments the _pollStruct pointer to prepare for the next poll.
 bool Server::pollin()
 {
     if (_pollStruct_->revents & POLLIN)
@@ -188,13 +190,15 @@ bool Server::pollin()
     return false;
 }
 
+//t checks if a client's file descriptor is ready for output (writing), and if there is no outgoing data to send, 
+//it closes the client connection and returns true. Otherwise, it returns false.
 bool    Server::pollout()
 {
     if (_pollStruct_->revents & POLLOUT)
     {
-        if ((*_client_)->outgoingData())
+        if (!(*_client_)->outgoingData())
             return (closeClientConnection(CLOSE_DONE), true);
-        ++_pollStruct_;
+        //++_pollStruct_; why dont we go to next iteration here?
         return true;
     }
     return false;

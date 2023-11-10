@@ -112,3 +112,13 @@
 # define CLOSE_NODATA		"No data received."
 # define CLOSE_EXCPT		"CloseConnection exception caught."
 # define CLOSE_DONE			"Done sending data."
+
+
+// numericals
+# define SEND_CHUNK_SIZE		8192
+# define CGI_TIMEOUT			3
+
+// Client
+# define E_CL_CHILD			"Error: Client: child exited with error or was terminated."
+# define E_CL_CHILDTIMEOUT	"Error: Client: child timed out."
+# define E_CL_TEMPFILEDEL	"Error: Client: Could not remove POST CGI tempfile."

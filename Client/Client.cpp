@@ -1,6 +1,8 @@
 #include "Client.hpp"
 
 
+
+
 Client::Client(const Configuration &config, std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _config_(config), _pollStruct_(pollstruct), _fd_(fd), _address_(address)
 {
     std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
@@ -39,11 +41,11 @@ void Client::receive()
 
 bool Client::outgoingData()
 {
-    // if (_cgiInProgress_)
-    // {
-    //     if (handleCGI())
-    //         return true;
-    // }    
+    if (_cgiInProgress_)
+    {
+        if (handleCGI())
+            return true; // cgi not done
+    }    
     return _response_->send(_fd_);
 }
 
@@ -166,16 +168,41 @@ void Client::handleDelete()
 
 bool    Client::handleCGI()
 {
+    int status;
     if (!_cgiInProgress_)
     {
         _pollStruct_->events = POLLOUT | POLLHUP;
         launchChild();
     }
+    if (waitpid(_pid_, &status, WNOHANG) == 0)
+	{
+		if (_time_ + CGI_TIMEOUT < time(NULL))
+		{
+			std::cerr << E_CL_CHILDTIMEOUT << std::endl;
+			kill(_pid_, SIGKILL);
+			waitpid(_pid_, &status, 0); // have to wait for child to finish dying
+		}
+		else
+			return true; // child still running, but not timed out.
+	}
+	
+	_cgiInProgress_ = false;
 
-    //
-    //
-    //
-    return 1;
+	if (WIFEXITED(status) == 0 || WEXITSTATUS(status) != 0) // WIFEXITED(status) == 0 -> child was interrupted
+	{
+		std::cerr << E_CL_CHILD << std::endl;
+		throw ErrCode(500, "MYNAME"); //
+	}
+	
+	if (resourceExists(_request_->cgiOut()))
+		newResponse(_request_->cgiOut());
+	else
+		newResponse(500);
+
+	if (_request_->method() == POST && remove(_request_->cgiIn().c_str()) != 0)
+		std::cerr << E_CL_TEMPFILEDEL << std::endl;
+	
+	return false;
 }
 
 void    Client::launchChild()
@@ -206,12 +233,13 @@ void    Client::makeEnv()
     _argVVecStr_.push_back(_request_->cgiExecPath());
     _argVVecStr_.push_back(_request_->updatedURL());
     for (size_t i = 0; i < _argVVec_.size(); ++i)
-        _argVVec_.push_back(const_cast<char *>(_argVVecStr_[i].c_str())); //wht ?
+        _argVVec_.push_back(const_cast<char *>(_argVVecStr_[i].c_str())); //wht ?   
     _argVVec_.push_back(NULL);
+
     std::stringstream   contentLength, port;
     std::string     cookie, ipAddress, userAgent;
     contentLength << _request_->contentLength();
-	// port << ntohs(_request->activeConfig()->getPort());
+	port << ntohs(_request_->activeConfig()->getPort());
 
 	if (_request_->headers()->find("cookie") != _request_->headers()->end())
 		cookie = _request_->headers()->find("cookie")->second;
