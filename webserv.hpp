@@ -33,6 +33,8 @@ typedef enum dynamicContentSelector
 // #include"Config/configFile.hpp"
 // class Config;
 
+#include "Exceptions/CloseConnection.hpp"
+class CloseConnection;
 
 #include "Configuration/Configuration.hpp"
 class Config;

@@ -70,13 +70,14 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
 {
     _pollStruct_ = pollstruct;
     receive();
-    // std::cout << "Client " << _fd_ << " says: " << _buffer_ << std::endl;
+
     if (!_request_)
         newRequest();
-    //
-    if ( _request_->method() == GET)
+    if (_request_->internalScript())
+		newResponse(_request_->internalScript());
+    else if ( _request_->method() == GET)
         handleGet();
-    if (_request_->method() == POST)
+    else if (_request_->method() == POST)
         handlePost();
     else if(_request_->method() == DELETE)
         handleDelete();
@@ -88,7 +89,7 @@ void Client::receive()
 
     int bytesReceived = recv(_fd_, buff, RECV_CHUNK_SIZE, 0);
     if (bytesReceived <= 0)
-        perror("recv error"); // 
+        throw CloseConnection("MYNAME", E_RECV); //
     _buffer_.append(buff, bytesReceived);
 }
 
