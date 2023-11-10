@@ -75,28 +75,28 @@ bool Server::poll()
 
 void Server::acceptNewClients()
 {
-    _pollStruct_ = _pollStructs_.begin();
-    while (_pollStruct_ != _pollStructs_.end())
+    for (size_t i = 0; i < _binds_.size(); ++i)
     {
+        if (!(_pollStructs_[i].revents & POLLIN))
+            continue;
+
         while (true)
         {
             sockaddr_in clientAddr;
             socklen_t clientAddrSize = sizeof(clientAddr);
-            int newClientFd = accept(_pollStructs_[0].fd, (struct sockaddr *)&clientAddr, &clientAddrSize); //
+            int newClientFd = accept(_pollStructs_[i].fd, (struct sockaddr *)&clientAddr, &clientAddrSize);
             if (newClientFd == -1)
             {
-                std::cout << errno;
                 if (errno == EWOULDBLOCK)
                     return ;
                 acceptError(newClientFd);
             }
             if (fcntl(newClientFd, F_SETFL, O_NONBLOCK) == -1)
                 acceptError(newClientFd);
-                    // perror("client fcntl error");
+            
             addPollStruct(newClientFd, POLLIN | POLLHUP);
-            _clients_.push_back(new Client(_configs_[0], _pollStruct_, newClientFd, clientAddr));
+            _clients_.push_back(new Client(_configs_[i], _pollStruct_, newClientFd, clientAddr));
         }
-        _pollStruct_++; //
     }
 }
 
@@ -106,15 +106,21 @@ void Server::handleClients()
     _pollStruct_ = _pollStructs_.begin() + _binds_.size();
     while(_pollStruct_ != _pollStructs_.end())
     {
-        std::cout << "handling client" << std::endl;
-        _client_ = getClientByFd(_pollStruct_->fd);
-        if (pollhup())
-            continue;
-        if (pollin())
-            continue;
-        if (pollout())
-            continue;
-        
+        try{
+
+        // std::cout << "handling client" << std::endl;
+            _client_ = getClientByFd(_pollStruct_->fd);
+            if (pollhup())
+                continue;
+            if (pollin())
+                continue;
+            if (pollout())
+                continue;
+        } catch(const ErrCode &e)
+        {
+            std::cerr << e.what() << std::endl;
+            (*_client_)->sendStatusPage(e.getCode());
+        }
         _pollStruct_++;
     }
     //try - catch

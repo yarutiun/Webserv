@@ -240,3 +240,8 @@ void    Client::makeEnv()
 	_envVec_.push_back(NULL);
 
 }
+
+void Client::sendStatusPage(int code)
+{
+    newResponse(code);
+}

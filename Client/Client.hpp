@@ -24,6 +24,7 @@ class Client
         bool        handleCGI();
         void        launchChild();
         void        makeEnv();
+        void        sendStatusPage(int code);
 
     
     private:
