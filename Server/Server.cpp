@@ -10,7 +10,22 @@ Server::Server(int argc, char **argv) {
 
 void Server::launchBinds()
 {
-    bindListeningSocket();
+    for(size_t i = 0; i < _configs_.size(); ++i)
+    {
+        try
+        {
+            bindListeningSocket();
+        }
+        catch(const std::exception &e)
+        {
+            std::cerr << e.what() << std::endl;
+        }
+    }
+    if (_binds_.empty())
+    {
+        std::cerr << E_S_NOBINDINGS << std::endl;
+        shutdown();
+    }
 }
 
 void Server::bindListeningSocket()
@@ -173,5 +188,39 @@ void Server::acceptError(int fd)
     close(fd);
     throw std::runtime_error("accept error");
 }
+
+void Server::shutdown()
+{
+	std::cout << "\nShutdown." << std::endl;
+
+	std::cout << "\nClosing " << _pollStructs_.size() << (_pollStructs_.size() == 1 ? " socket:" : " sockets:") << std::endl;
+	for (std::vector<pollfd>::iterator it = _pollStructs_.begin(); it != _pollStructs_.end(); ++it)
+	{
+		std::cout << "\tClosing socket fd " << it->fd << "." << std::endl;
+		close(it->fd);
+	}
+
+	std::cout << "\nDeleting " << _binds_.size() << (_binds_.size() == 1 ? " Binding:" : " Bindings:") << std::endl;
+	for (size_t i = 0; !_binds_.empty(); ++i)
+	{
+		std::cout << "\tDeleting Binding " << i << "." << std::endl;
+		delete _binds_[0];
+		_binds_.erase(_binds_.begin());
+	}
+
+	if (_clients_.empty())
+		std::cout << "\nNo Clients connected, nothing to delete." << std::endl;
+	else
+	{
+		std::cout << "\nDeleting " << _clients_.size() << (_clients_.size() == 1 ? " Client:" : " Clients:") << std::endl;
+		for (size_t i = 0; !_clients_.empty(); ++i)
+		{
+			std::cout << "\tDeleting Client " << i << "." << std::endl;
+			delete _clients_[0];
+			_clients_.erase(_clients_.begin());
+		}
+	}
+}
+
 
 

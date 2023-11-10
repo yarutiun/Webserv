@@ -21,6 +21,7 @@ class Server{
         bool pollout();
         void closeClientConnection();
         void acceptError(int newClientFd);
+        void shutdown();
 
     private:
         std::vector<Configuration>    _configs_;

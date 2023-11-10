@@ -97,3 +97,11 @@
 # define E_SEND					"No data sent."
 # define E_RECV					"No data received."
 # define E_TEMPFILEREMOVAL		"Error: Response: Could not remove temp CGI-out file."
+
+
+// Server
+# define E_S_CLIENTNOTFOUND	"Error: Server: Client fd not found in poll vector."
+# define E_S_PSTRUCNOTFOUND	"Error: Server: Pollstruct fd not found in pollstruct vector."
+# define E_S_NOBINDINGS		"Error: Server: No listening sockets bound."
+
+# define I_S_BINDINGS		"Info: Server: " << _bindings.size() << (_bindings.size() == 1 ? " listening socket" : " listening sockets") << " successfully bound."
