@@ -17,7 +17,7 @@ class Client
         void receive();
         bool outgoingData();
         void newRequest();
-        void newResponse(const std::string &sendPath); // made it const ?!?
+        void newResponse(std::string sendPath);
         void newResponse(int statusCode);
         void newResponse(dynCont &dynContent);
         const char *getAddr() const;
@@ -28,6 +28,10 @@ class Client
         void        launchChild();
         void        makeEnv();
         void        sendStatusPage(int code);
+        std::string prependClassName(std::string function);
+        void        whoIsI() const;
+
+
 
     
     private:

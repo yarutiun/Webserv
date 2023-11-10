@@ -105,8 +105,9 @@ bool Client::outgoingData()
 
 void Client::newRequest()
 {
-    _request_ = new Request(_buffer_, _config_, *this); // change later
+    _request_ = new Request(_buffer_, _config_, *this); // ch
     _request_->process();
+    _request_->whoIsI();
 }
 
 const char *Client::getAddr() const
@@ -116,8 +117,11 @@ const char *Client::getAddr() const
 
 void Client::handleGet()
 {
-    //if for cgi here
-
+	if (_request_->cgiRequest())
+	{
+		handleCGI();
+		return;
+	}
     if(isDirectory(_request_->updatedURL()))
     {
         std::string stdFile = _request_->updatedURL() + _request_->standardFile();
@@ -138,7 +142,7 @@ void Client::handleGet()
 }
 
 
-void Client::newResponse(std::string const &path)
+void Client::newResponse(std::string path)
 {
     if (_response_)
         delete _response_;
@@ -201,9 +205,9 @@ void Client::handlePost()
     file.close();
     if (_bytesWritten_ >= _request_->contentLength())
     {
-        // if (_request_->cgiRequest())
-        //     handleCGI();
-        // else
+        if (_request_->cgiRequest())
+            handleCGI();
+        else
             newResponse(201);
     }
 }
@@ -326,4 +330,20 @@ void    Client::makeEnv()
 void Client::sendStatusPage(int code)
 {
     newResponse(code);
+}
+
+std::string Client::prependClassName(std::string function)
+{
+	return "Client::" + function;
+}
+
+void Client::whoIsI() const
+{
+	std::stringstream title;
+	title << "----- Client on fd " << _fd_ << " with session id " << _request_->sessionID() << " -----";
+	std::string separator(title.str().size(), '-');
+	
+	std::cout << "\n" << title.str() << "\n";
+	_request_->whoIsI();
+	std::cout << separator << "\n" << std::endl;
 }
