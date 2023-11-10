@@ -1,7 +1,7 @@
 #include "Client.hpp"
 
 Client::Client(const Configuration &config, std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _config_(config), 
-_pollStruct_(pollstruct), 
+_pollStruct_(pollstruct), /// serious damage!!!????!!!
 _fd_(fd), 
 _address_(address),
 _request_(NULL),
@@ -11,7 +11,54 @@ _bytesWritten_(0),
 _cgiInProgress_(false),
 _time_(0)
 {
-    std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
+}
+
+Client::Client(const Client& src):
+	_config_(src._config_),
+	_pollStructs_(src._pollStructs_)
+{
+	*this = src;
+}
+
+Client::~Client()
+{
+	if (_request_)
+		delete _request_;
+	
+	if (_response_)
+		delete _response_;
+}
+
+Client& Client::operator=(const Client& src)
+{
+	if (src._request_ != NULL)
+		_request_ = new Request(*src._request_);
+	else
+		_request_ = NULL;
+	
+	if (src._response_ != NULL)
+		_response_ = src._response_->clone();
+	else
+		_response_ = NULL;
+	
+	_fd_ = src._fd_;
+	_address_ = src._address_;
+	_buffer_ = src._buffer_;
+	_pollStruct_ = src._pollStruct_;
+
+	_append_ = src._append_;
+	_bytesWritten_ = src._bytesWritten_;
+	
+	_pid_ = src._pid_;
+	_time_ = src._time_;
+	_cgiInProgress_ = src._cgiInProgress_;
+	
+	_envVec_ = src._envVec_;
+	_envVecStr_ = src._envVecStr_;
+	_argVVec_ = src._argVVec_;
+	_argVVecStr_ = src._argVVecStr_;
+
+	return *this;
 }
 
 int Client::getFd() const
