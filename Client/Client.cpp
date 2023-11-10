@@ -1,9 +1,15 @@
 #include "Client.hpp"
 
-
-
-
-Client::Client(const Configuration &config, std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _config_(config), _pollStruct_(pollstruct), _fd_(fd), _address_(address)
+Client::Client(const Configuration &config, std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _config_(config), 
+_pollStruct_(pollstruct), 
+_fd_(fd), 
+_address_(address),
+_request_(NULL),
+_response_(NULL),
+_append_(false),
+_bytesWritten_(0),
+_cgiInProgress_(false),
+_time_(0)
 {
     std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
 }
