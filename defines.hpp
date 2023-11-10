@@ -104,7 +104,7 @@
 # define E_S_PSTRUCNOTFOUND	"Error: Server: Pollstruct fd not found in pollstruct vector."
 # define E_S_NOBINDINGS		"Error: Server: No listening sockets bound."
 
-# define I_S_BINDINGS		"Info: Server: " << _bindings.size() << (_bindings.size() == 1 ? " listening socket" : " listening sockets") << " successfully bound."
+# define I_S_BINDINGS		"Info: Server: " << _binds_.size() << (_binds_.size() == 1 ? " listening socket" : " listening sockets") << " successfully bound."
 
 
 // close messages
@@ -122,3 +122,4 @@
 # define E_CL_CHILD			"Error: Client: child exited with error or was terminated."
 # define E_CL_CHILDTIMEOUT	"Error: Client: child timed out."
 # define E_CL_TEMPFILEDEL	"Error: Client: Could not remove POST CGI tempfile."
+

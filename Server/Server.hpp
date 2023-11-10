@@ -11,7 +11,7 @@ class Server{
         Server(int argc, char **argv);
         bool poll();
         void launchBinds();
-        void bindListeningSocket();
+        void bindListeningSocket(const Configuration &conf);
         void acceptNewClients();
         void addPollStruct(int fd, short events);
         void handleClients();

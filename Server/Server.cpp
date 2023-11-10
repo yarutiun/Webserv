@@ -16,7 +16,7 @@ void Server::launchBinds()
     {
         try
         {
-            bindListeningSocket();
+            bindListeningSocket((_configs_)[i]);
         }
         catch(const std::exception &e)
         {
@@ -28,11 +28,12 @@ void Server::launchBinds()
         std::cerr << E_S_NOBINDINGS << std::endl;
         shutdown();
     }
+    std::cout << I_S_BINDINGS << std::endl;
 }
 
-void Server::bindListeningSocket()
+void Server::bindListeningSocket(const Configuration &config)
 {
-    Binding *newBinding = new Binding();
+    Binding *newBinding = new Binding(config);
     int listeningSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     int opt = 1;
 

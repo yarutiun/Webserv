@@ -1,10 +1,11 @@
 #include"Binding.hpp"
 
-Binding::Binding()
+Binding::Binding(const Configuration &conf): _conf_(&conf)
 {
-    _addr_.sin_family = AF_INET;
-    _addr_.sin_addr.s_addr = INADDR_ANY;
-    _addr_.sin_port = htons(8080);
+	_fd_ = -1;
+	_addr_.sin_family = AF_INET;
+	_addr_.sin_addr.s_addr = conf.getHost();
+	_addr_.sin_port = conf.getPort();
 }
 
 sockaddr_in *Binding::addrOfSocketAddr()
@@ -24,6 +25,6 @@ void Binding::whoIs()
     title << dashes << "Binding " << inet_ntoa(_addr_.sin_addr) << ":" << ntohs(_addr_.sin_port) << dashes;
     std::string sep(title.str().size(), '-');
     std::cout << "\n" << title.str() << "\n";
-    //whoisConf...
+    _conf_->whoIsI();
     std::cout << sep << "\n";
 }

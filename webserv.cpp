@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 
     Server webserv(argc, argv);
 
-    webserv.bindListeningSocket();
+    webserv.launchBinds();
     while(webserv.poll())
     {
         webserv.acceptNewClients();
