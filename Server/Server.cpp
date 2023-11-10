@@ -8,6 +8,8 @@ Server::Server(int argc, char **argv) {
     _configs_ = configFileParser.getConfigs();
 }
 
+/*function is responsible for iterating over server configurations, attempting to bind sockets for each configuration
+*/
 void Server::launchBinds()
 {
     for(size_t i = 0; i < _configs_.size(); ++i)
@@ -47,14 +49,20 @@ void Server::bindListeningSocket()
     
     addPollStruct(listeningSocket, POLLIN);
     newBinding->setFd(listeningSocket);
-    _binds_.push_back(newBinding);
+    _binds_.push_back(newBinding); //The _binds_ attribute represents the successful bindings or connections established by the server. 
+    //Each successful binding corresponds to a potential client connection.
     newBinding->whoIs();
 }
+
+/* The poll function is used to wait for an event on any of the file descriptors in the _pollStructs array. 
+It blocks until either an event occurs or a signal is received. 
+The poll function updates the revents field in the pollfd structures to indicate which events have occurred.
+*/
 
 bool Server::poll() 
 {
     // monitor multiple descriptors for events. ::poll system call allows to wait for events on multiple fds
-    // wo blocking the program (async)
+    // wo blocking the program
     if (::poll(_pollStructs_.data(), _pollStructs_.size(), -1) == -1)
     {
         if (!signum)
