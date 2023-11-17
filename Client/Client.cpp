@@ -105,7 +105,7 @@ bool Client::outgoingData()
 
 void Client::newRequest()
 {
-    _request_ = new Request(_buffer_, _config_, *this); // ch
+    _request_ = new Request(_buffer_, _config_, *this); 
     _request_->process();
     _request_->whoIsI();
 }

@@ -22,6 +22,7 @@ class Server{
         void closeClientConnection(std::string msg);
         void acceptError(int newClientFd);
         void shutdown();
+        void bindError(int Binds, Binding *newBinding);
 
     private:
         std::vector<Configuration>    _configs_;

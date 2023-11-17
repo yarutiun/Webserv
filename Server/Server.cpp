@@ -38,15 +38,15 @@ void Server::bindListeningSocket(const Configuration &config)
     int opt = 1;
 
     if (listeningSocket == -1)
-        perror("socket error"); //errors to be handled smarter
+		bindError(listeningSocket, newBinding);
     if (setsockopt(listeningSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) == -1)
-        perror("setsockopt error");
+		bindError(listeningSocket, newBinding);
     if (fcntl(listeningSocket, F_SETFL, O_NONBLOCK) == -1)
-        perror("fcntl error");
+		bindError(listeningSocket, newBinding);
     if (bind(listeningSocket, (struct sockaddr*)newBinding->addrOfSocketAddr(), sizeof(sockaddr_in)) == -1)
-        perror("bind error");
+		bindError(listeningSocket, newBinding);
     if (listen(listeningSocket, SOMAXCONN) == -1)
-        perror("listen error");
+		bindError(listeningSocket, newBinding);
     
     addPollStruct(listeningSocket, POLLIN);
     newBinding->setFd(listeningSocket);
@@ -109,7 +109,6 @@ void Server::handleClients()
     {
         try
         {
-        // std::cout << "handling client" << std::endl;
             _client_ = getClientByFd(_pollStruct_->fd);
             if (pollhup())
                 continue;
@@ -244,5 +243,10 @@ void Server::shutdown()
 	}
 }
 
-
-
+void Server::bindError(int fd, Binding *newBinding)
+{
+    if (fd == -1)
+        close(fd);
+    delete newBinding;
+    throw std::runtime_error(strerror(errno));
+}

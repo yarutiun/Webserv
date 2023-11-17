@@ -101,8 +101,7 @@ void Request::parseRequestHeaders()
 		if (buffer->size() >= MAX_REQHEADSIZE)
             throw ErrCode(431, MYNAME);
 		else
-            perror("Request::parseRequestHeaders: buffer does not contain \\r\\n\\r\\n"); //
-			//throw ErrorCode(400, MYNAME);
+			throw ErrCode(400, MYNAME);
 	}
 	_headers = parseStrMap(*buffer, ":", "\r\n", "\r\n");
 	
