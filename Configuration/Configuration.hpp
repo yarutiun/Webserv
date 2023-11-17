@@ -44,9 +44,9 @@ public:
     unsigned long                                                   getClientMaxBody() const;
     size_t                                                          getMaxConnections() const;
     std::string const                                               &getStandardFile() const;
-    std::map<int, std::string> const                                &getStatusPagePaths() const;
-    std::map<std::string, locInfo> const                            &getLocations() const;
-    std::map<std::string, std::string> const                        &getCgiPaths() const;
+    std::map<int, std::string> const                                *getStatusPagePaths() const;
+    std::map<std::string, locInfo> const                            *getLocations() const;
+    std::map<std::string, std::string> const                        *getCgiPaths() const;
     std::vector<Configuration> const                                &getAltConfigs() const;
 
     void										                    whoIsI() const;

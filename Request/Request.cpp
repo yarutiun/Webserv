@@ -201,22 +201,22 @@ void Request::requestError()
 	if (_contentLength > _activeConfig->getClientMaxBody())
 		throw ErrCode(413, MYNAME);
 
-	// std::map<std::string, locInfo>::const_iterator it = _activeConfig->getLocations()->find(_directory);
+	std::map<std::string, locInfo>::const_iterator it = _activeConfig->getLocations()->find(_directory);
 
-	// if (it == _activeConfig->getLocations()->end())
-	// {
-	// 	if ((_method == GET || _method == DELETE) && !resourceExists(prependRoot(_URL)))
-	// 		throw ErrCode(404, MYNAME); // can't check before in case of http redir
+	if (it == _activeConfig->getLocations()->end())
+	{
+		if ((_method == GET || _method == DELETE) && !resourceExists(prependRoot(_URL)))
+			throw ErrCode(404, MYNAME); // can't check before in case of http redir
 
-	// 	throw ErrCode(403, MYNAME); // should always 404 on a production system to not leak file structure
-	// }
+		throw ErrCode(403, MYNAME); // should always 404 on a production system to not leak file structure
+	}
 	
-	// _locationInfo = it->second;
+	_locationInfo = it->second;
 
-	// if ((_method == GET && !_locationInfo.get)
-	// 	|| (_method == POST && !_locationInfo.post)
-	// 	|| (_method == DELETE && !_locationInfo.delete_)) 
-	// 	throw ErrCode(405, MYNAME);
+	if ((_method == GET && !_locationInfo.get)
+		|| (_method == POST && !_locationInfo.post)
+		|| (_method == DELETE && !_locationInfo.delete_)) 
+		throw ErrCode(405, MYNAME);
 }
 
 void Request::updateVars()
