@@ -1,7 +1,7 @@
 #include "Client.hpp"
 
-Client::Client(const Configuration &config, std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _config_(config), 
-_pollStruct_(pollstruct), /// serious damage!!!????!!!
+Client::Client(const Configuration &config, std::vector<struct pollfd> &pollstructs, int fd, sockaddr_in address): _config_(config), 
+_pollStructs_(pollstructs),
 _fd_(fd), 
 _address_(address),
 _request_(NULL),

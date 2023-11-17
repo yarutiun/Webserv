@@ -96,7 +96,7 @@ void Server::acceptNewClients()
                 acceptError(newClientFd);
             
             addPollStruct(newClientFd, POLLIN | POLLHUP);
-            _clients_.push_back(new Client(_configs_[i], _pollStruct_, newClientFd, clientAddr));
+            _clients_.push_back(new Client(_configs_[i], _pollStructs_, newClientFd, clientAddr));
         }
     }
 }
