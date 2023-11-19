@@ -9,14 +9,6 @@ Request::Request(std::string& bufferRef, const Configuration& config, const Clie
 	_internalScript(no)
 {}
 
-// delete later
-// Request::Request(std::string& bufferRef, const Client& client):
-// 	buffer(&bufferRef), // non const buffer from Client
-// 	_client(&client),
-// 	_cgiRequest(false),
-// 	_internalScript(no)
-// {}
-
 Request::Request(const Request& src)
 {
 	*this = src;
@@ -235,19 +227,19 @@ void Request::updateVars()
 		...
 		*/
 	}
-	// else if (_activeConfig->getCgiPaths()->find(extension) != _activeConfig->getCgiPaths()->end())
-	// {
-	// 	_cgiExecPath = _activeConfig->getCgiPaths()->find(extension)->second;
-	// 	_cgiRequest = true;
+	else if (_activeConfig->getCgiPaths()->find(extension) != _activeConfig->getCgiPaths()->end())
+	{
+		_cgiExecPath = _activeConfig->getCgiPaths()->find(extension)->second;
+		_cgiRequest = true;
 
-	// 	std::stringstream	in, out;
+		std::stringstream	in, out;
 		
-	// 	in << SYS_TEMP_CGIIN << _client->getFd();
-	// 	_cgiIn = in.str();
+		in << SYS_TEMP_CGIIN << _client->getFd();
+		_cgiIn = in.str();
 		
-	// 	out << SYS_TEMP_CGIOUT << _client->getFd() << ".html";
-	// 	_cgiOut = out.str();
-	// }
+		out << SYS_TEMP_CGIOUT << _client->getFd() << ".html";
+		_cgiOut = out.str();
+	}
 	
 	// standard file
 
@@ -264,10 +256,10 @@ void Request::updateVars()
 		if (!resourceExists(prependRoot(_updatedDirectory)))
 			throw ErrCode(500, MYNAME);
 		
-		// if (_activeConfig->getLocations()->find(_updatedDirectory) == _activeConfig->getLocations()->end())
-		// 	throw ErrCode(403, MYNAME); // upload_redir also has to be set in the config file
+		if (_activeConfig->getLocations()->find(_updatedDirectory) == _activeConfig->getLocations()->end())
+			throw ErrCode(403, MYNAME); // upload_redir also has to be set in the config file
 		
-		// _locationInfo = _activeConfig->getLocations()->find(_updatedDirectory)->second; // upload_redir changes locInfo
+		_locationInfo = _activeConfig->getLocations()->find(_updatedDirectory)->second; // upload_redir changes locInfo
 	}
 
 	// else -> http_redir
@@ -360,9 +352,9 @@ bool Request::dirListing() const
 		return true;
 	else if (_locationInfo.dir_listing == "no")
 		return false;
-	// else if (!_activeConfig->getDefaultDirlisting())
-	// 	return false;
-	// else
+	else if (!_activeConfig->isDefaultDirListing())
+		return false;
+	else
 		return true;
 }
 
@@ -392,11 +384,11 @@ std::string Request::statusPagePath(int code) const
 {
 	/////// 
 	(void)code;
-	// std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
+	std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
 	
-	// if (codePath == _activeConfig->getStatusPagePaths()->end())
+	if (codePath == _activeConfig->getStatusPagePaths()->end())
 		return "";
-	// return prependRoot(codePath->second);
+	return prependRoot(codePath->second);
 }
 
 const std::string& Request::root() const { 
