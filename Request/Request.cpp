@@ -177,7 +177,7 @@ void Request::selectConfig()
 			return;
 		}
 	}
-
+	// added a comment here
 	_activeConfig = _config;
 	_selectedHost = _activeConfig->getNames()[0];
 }
