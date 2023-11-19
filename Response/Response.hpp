@@ -3,6 +3,8 @@
 
 #include "../webserv.hpp"
 
+class File;
+
 class Response
 {
 	public:
