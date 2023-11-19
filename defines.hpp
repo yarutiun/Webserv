@@ -97,3 +97,29 @@
 # define E_SEND					"No data sent."
 # define E_RECV					"No data received."
 # define E_TEMPFILEREMOVAL		"Error: Response: Could not remove temp CGI-out file."
+
+
+// Server
+# define E_S_CLIENTNOTFOUND	"Error: Server: Client fd not found in poll vector."
+# define E_S_PSTRUCNOTFOUND	"Error: Server: Pollstruct fd not found in pollstruct vector."
+# define E_S_NOBINDINGS		"Error: Server: No listening sockets bound."
+
+# define I_S_BINDINGS		"Info: Server: " << _binds_.size() << (_binds_.size() == 1 ? " listening socket" : " listening sockets") << " successfully bound."
+
+
+// close messages
+# define CLOSE_POLLHUP		"POLLHUP."
+# define CLOSE_NODATA		"No data received."
+# define CLOSE_EXCPT		"CloseConnection exception caught."
+# define CLOSE_DONE			"Done sending data."
+
+
+// numericals
+# define SEND_CHUNK_SIZE		8192
+# define CGI_TIMEOUT			3
+
+// Client
+# define E_CL_CHILD			"Error: Client: child exited with error or was terminated."
+# define E_CL_CHILDTIMEOUT	"Error: Client: child timed out."
+# define E_CL_TEMPFILEDEL	"Error: Client: Could not remove POST CGI tempfile."
+

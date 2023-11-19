@@ -8,13 +8,16 @@ class Response;
 class Client
 {
     public:
-        Client(const Configuration &conf, std::vector<struct pollfd>::iterator pollStruct, int fd, sockaddr_in address);
+        Client(const Configuration &config, std::vector<struct pollfd> &pollstructs, int fd, sockaddr_in address);
+        Client &operator=(const Client& src);
+        ~Client();
+        Client(const Client& src);
         int getFd() const;
         void incomingData(std::vector<struct pollfd>::iterator pollStruct);
         void receive();
         bool outgoingData();
         void newRequest();
-        void newResponse(const std::string &sendPath); // made it const ?!?
+        void newResponse(std::string sendPath);
         void newResponse(int statusCode);
         void newResponse(dynCont &dynContent);
         const char *getAddr() const;
@@ -24,6 +27,11 @@ class Client
         bool        handleCGI();
         void        launchChild();
         void        makeEnv();
+        void        sendStatusPage(int code);
+        std::string prependClassName(std::string function);
+        void        whoIsI() const;
+
+
 
     
     private:

@@ -271,16 +271,16 @@ std::string const &Configuration::getStandardFile() const {
     return _standardFile;
 }
 
-std::map<int, std::string> const &Configuration::getStatusPagePaths() const {
-    return _statusPagePaths;
+std::map<int, std::string> const *Configuration::getStatusPagePaths() const {
+    return &_statusPagePaths;
 }
 
-std::map<std::string, locInfo> const &Configuration::getLocations() const {
-    return _locations;
+std::map<std::string, locInfo> const *Configuration::getLocations() const {
+    return &_locations;
 }
 
-std::map<std::string, std::string> const &Configuration::getCgiPaths() const {
-    return _cgiPaths;
+std::map<std::string, std::string> const *Configuration::getCgiPaths() const {
+    return &_cgiPaths;
 }
 
 std::vector<Configuration> const &Configuration::getAltConfigs() const {

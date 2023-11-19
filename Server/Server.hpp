@@ -11,7 +11,7 @@ class Server{
         Server(int argc, char **argv);
         bool poll();
         void launchBinds();
-        void bindListeningSocket();
+        void bindListeningSocket(const Configuration &conf);
         void acceptNewClients();
         void addPollStruct(int fd, short events);
         void handleClients();
@@ -19,8 +19,10 @@ class Server{
         bool pollhup();
         bool pollin();
         bool pollout();
-        void closeClientConnection();
+        void closeClientConnection(std::string msg);
         void acceptError(int newClientFd);
+        void shutdown();
+        void bindError(int Binds, Binding *newBinding);
 
     private:
         std::vector<Configuration>    _configs_;

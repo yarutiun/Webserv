@@ -1,9 +1,64 @@
 #include "Client.hpp"
 
-
-Client::Client(const Configuration &config, std::vector<struct pollfd>::iterator pollstruct, int fd, sockaddr_in address): _config_(config), _pollStruct_(pollstruct), _fd_(fd), _address_(address)
+Client::Client(const Configuration &config, std::vector<struct pollfd> &pollstructs, int fd, sockaddr_in address): _config_(config), 
+_pollStructs_(pollstructs),
+_fd_(fd), 
+_address_(address),
+_request_(NULL),
+_response_(NULL),
+_append_(false),
+_bytesWritten_(0),
+_cgiInProgress_(false),
+_time_(0)
 {
-    std::cout << "Client created" << _fd_ << _address_.sin_addr.s_addr << std::endl;
+}
+
+Client::Client(const Client& src):
+	_config_(src._config_),
+	_pollStructs_(src._pollStructs_)
+{
+	*this = src;
+}
+
+Client::~Client()
+{
+	if (_request_)
+		delete _request_;
+	
+	if (_response_)
+		delete _response_;
+}
+
+Client& Client::operator=(const Client& src)
+{
+	if (src._request_ != NULL)
+		_request_ = new Request(*src._request_);
+	else
+		_request_ = NULL;
+	
+	if (src._response_ != NULL)
+		_response_ = src._response_->clone();
+	else
+		_response_ = NULL;
+	
+	_fd_ = src._fd_;
+	_address_ = src._address_;
+	_buffer_ = src._buffer_;
+	_pollStruct_ = src._pollStruct_;
+
+	_append_ = src._append_;
+	_bytesWritten_ = src._bytesWritten_;
+	
+	_pid_ = src._pid_;
+	_time_ = src._time_;
+	_cgiInProgress_ = src._cgiInProgress_;
+	
+	_envVec_ = src._envVec_;
+	_envVecStr_ = src._envVecStr_;
+	_argVVec_ = src._argVVec_;
+	_argVVecStr_ = src._argVVecStr_;
+
+	return *this;
 }
 
 int Client::getFd() const
@@ -15,13 +70,14 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
 {
     _pollStruct_ = pollstruct;
     receive();
-    // std::cout << "Client " << _fd_ << " says: " << _buffer_ << std::endl;
+
     if (!_request_)
         newRequest();
-    //
-    if ( _request_->method() == GET)
+    if (_request_->internalScript())
+		newResponse(_request_->internalScript());
+    else if ( _request_->method() == GET)
         handleGet();
-    if (_request_->method() == POST)
+    else if (_request_->method() == POST)
         handlePost();
     else if(_request_->method() == DELETE)
         handleDelete();
@@ -33,24 +89,25 @@ void Client::receive()
 
     int bytesReceived = recv(_fd_, buff, RECV_CHUNK_SIZE, 0);
     if (bytesReceived <= 0)
-        perror("recv error"); // 
+        throw CloseConnection("MYNAME", E_RECV); //
     _buffer_.append(buff, bytesReceived);
 }
 
 bool Client::outgoingData()
 {
-    // if (_cgiInProgress_)
-    // {
-    //     if (handleCGI())
-    //         return true;
-    // }    
+    if (_cgiInProgress_)
+    {
+        if (handleCGI())
+            return true; // cgi not done
+    }    
     return _response_->send(_fd_);
 }
 
 void Client::newRequest()
 {
-    _request_ = new Request(_buffer_, _config_, *this); // change later
+    _request_ = new Request(_buffer_, _config_, *this); 
     _request_->process();
+    _request_->whoIsI();
 }
 
 const char *Client::getAddr() const
@@ -60,8 +117,11 @@ const char *Client::getAddr() const
 
 void Client::handleGet()
 {
-    //if for cgi here
-
+	if (_request_->cgiRequest())
+	{
+		handleCGI();
+		return;
+	}
     if(isDirectory(_request_->updatedURL()))
     {
         std::string stdFile = _request_->updatedURL() + _request_->standardFile();
@@ -82,7 +142,7 @@ void Client::handleGet()
 }
 
 
-void Client::newResponse(std::string const &path)
+void Client::newResponse(std::string path)
 {
     if (_response_)
         delete _response_;
@@ -145,9 +205,9 @@ void Client::handlePost()
     file.close();
     if (_bytesWritten_ >= _request_->contentLength())
     {
-        // if (_request_->cgiRequest())
-        //     handleCGI();
-        // else
+        if (_request_->cgiRequest())
+            handleCGI();
+        else
             newResponse(201);
     }
 }
@@ -166,16 +226,41 @@ void Client::handleDelete()
 
 bool    Client::handleCGI()
 {
+    int status;
     if (!_cgiInProgress_)
     {
         _pollStruct_->events = POLLOUT | POLLHUP;
         launchChild();
     }
+    if (waitpid(_pid_, &status, WNOHANG) == 0)
+	{
+		if (_time_ + CGI_TIMEOUT < time(NULL))
+		{
+			std::cerr << E_CL_CHILDTIMEOUT << std::endl;
+			kill(_pid_, SIGKILL);
+			waitpid(_pid_, &status, 0); // have to wait for child to finish dying
+		}
+		else
+			return true; // child still running, but not timed out.
+	}
+	
+	_cgiInProgress_ = false;
 
-    //
-    //
-    //
-    return 1;
+	if (WIFEXITED(status) == 0 || WEXITSTATUS(status) != 0) // WIFEXITED(status) == 0 -> child was interrupted
+	{
+		std::cerr << E_CL_CHILD << std::endl;
+		throw ErrCode(500, "MYNAME"); //
+	}
+	
+	if (resourceExists(_request_->cgiOut()))
+		newResponse(_request_->cgiOut());
+	else
+		newResponse(500);
+
+	if (_request_->method() == POST && remove(_request_->cgiIn().c_str()) != 0)
+		std::cerr << E_CL_TEMPFILEDEL << std::endl;
+	
+	return false;
 }
 
 void    Client::launchChild()
@@ -206,12 +291,13 @@ void    Client::makeEnv()
     _argVVecStr_.push_back(_request_->cgiExecPath());
     _argVVecStr_.push_back(_request_->updatedURL());
     for (size_t i = 0; i < _argVVec_.size(); ++i)
-        _argVVec_.push_back(const_cast<char *>(_argVVecStr_[i].c_str())); //wht ?
+        _argVVec_.push_back(const_cast<char *>(_argVVecStr_[i].c_str())); //wht ?   
     _argVVec_.push_back(NULL);
+
     std::stringstream   contentLength, port;
     std::string     cookie, ipAddress, userAgent;
     contentLength << _request_->contentLength();
-	// port << ntohs(_request->activeConfig()->getPort());
+	port << ntohs(_request_->activeConfig()->getPort());
 
 	if (_request_->headers()->find("cookie") != _request_->headers()->end())
 		cookie = _request_->headers()->find("cookie")->second;
@@ -239,4 +325,25 @@ void    Client::makeEnv()
 		_envVec_.push_back(const_cast<char*>(_envVecStr_[i].c_str()));
 	_envVec_.push_back(NULL);
 
+}
+
+void Client::sendStatusPage(int code)
+{
+    newResponse(code);
+}
+
+std::string Client::prependClassName(std::string function)
+{
+	return "Client::" + function;
+}
+
+void Client::whoIsI() const
+{
+	std::stringstream title;
+	title << "----- Client on fd " << _fd_ << " with session id " << _request_->sessionID() << " -----";
+	std::string separator(title.str().size(), '-');
+	
+	std::cout << "\n" << title.str() << "\n";
+	_request_->whoIsI();
+	std::cout << separator << "\n" << std::endl;
 }
