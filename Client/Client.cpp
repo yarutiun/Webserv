@@ -70,10 +70,9 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
 {
     _pollStruct_ = pollstruct;
     receive();
-
     if (!_request_)
         newRequest();
-    if (_request_->internalScript())
+    if (_request_->internalScript()) //chera
 		newResponse(_request_->internalScript());
     else if ( _request_->method() == GET)
         handleGet();
@@ -203,7 +202,7 @@ void Client::handlePost()
     _bytesWritten_ += _buffer_.size();
     _buffer_.clear();
     file.close();
-    if (_bytesWritten_ >= _request_->contentLength())
+    if (_bytesWritten_ >= _request_->contentLength()) /////chera?
     {
         if (_request_->cgiRequest())
             handleCGI();
