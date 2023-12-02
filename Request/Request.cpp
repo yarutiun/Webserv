@@ -83,7 +83,6 @@ void Request::parseRequestLine()
 	}
 
 	_file = _URL.substr(_URL.find_last_of("/") + 1);
-    std::cout << "PARSED: file " << _file << "url: " << _URL <<  "httpprotocl: " << _httpProtocol << "method: " << _method << std::endl;
 }
 
 void Request::parseRequestHeaders()
@@ -382,8 +381,6 @@ const locInfo* Request::locationInfo() const { return &_locationInfo; }
 
 std::string Request::statusPagePath(int code) const
 {
-	/////// 
-	(void)code;
 	std::map<int, std::string>::const_iterator codePath = _activeConfig->getStatusPagePaths()->find(code);
 	
 	if (codePath == _activeConfig->getStatusPagePaths()->end())

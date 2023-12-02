@@ -207,7 +207,7 @@ bool    Server::pollout()
 void Server::acceptError(int fd)
 {
     close(fd);
-    throw std::runtime_error("accept error");
+    throw std::runtime_error(strerror(errno));
 }
 
 void Server::shutdown()

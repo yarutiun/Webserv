@@ -89,7 +89,7 @@ void Client::receive()
 
     int bytesReceived = recv(_fd_, buff, RECV_CHUNK_SIZE, 0);
     if (bytesReceived <= 0)
-        throw CloseConnection("MYNAME", E_RECV); //
+        throw CloseConnection(MYNAME, E_RECV);
     _buffer_.append(buff, bytesReceived);
 }
 
