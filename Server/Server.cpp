@@ -67,7 +67,7 @@ bool Server::poll()
     if (::poll(_pollStructs_.data(), _pollStructs_.size(), -1) == -1)
     {
         if (!signum)
-            perror("poll error");
+            perror(__FUNCTION__);
     }
     if (signum)
         return false;

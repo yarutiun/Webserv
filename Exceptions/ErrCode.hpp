@@ -3,7 +3,8 @@
 
 #include "../webserv.hpp"
 
-class ErrCode{
+class ErrCode: public std::exception
+{
     public:
 		ErrCode(int, std::string);
 		virtual ~ErrCode() throw();
