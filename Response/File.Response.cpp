@@ -49,8 +49,7 @@ bool File::send(int fd)
 	if (::send(fd, buffer, fileStream.gcount(), 0) == -1)
 	{
 		fileStream.close();
-        throw "send err";
-		// throw CloseConnection(__FUNCTION__, E_SEND);
+		throw CloseConnection(__FUNCTION__, E_SEND);
 	}
 	
 	if (fileStream.eof())

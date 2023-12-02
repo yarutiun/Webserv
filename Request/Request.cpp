@@ -277,7 +277,6 @@ void Request::updateVars()
 std::string Request::prependRoot(const std::string& path) const
 {
 	if (path.find('/') == 0)
-        // return "hi line 289";
 		return _activeConfig->getRoot() + path.substr(1);
 	else
 		return path;

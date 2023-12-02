@@ -46,8 +46,7 @@ bool Response::sendInternalBuffer(int fd)
 	_sendBufPos = _sendBuffer.tellg();
 	
 	if (::send(fd, buffer, _sendBuffer.gcount(), 0) <= 0)
-        throw "send err";
-		// throw CloseConnection(__FUNCTION__, E_SEND);
+		throw CloseConnection(__FUNCTION__, E_SEND);
 	
 	if (_sendBuffer.tellg() == std::streampos(-1)) // end of buffer reached
 		return false;

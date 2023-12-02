@@ -185,7 +185,7 @@ void Client::handlePost()
     {
         path = _request_->updatedURL();
         if (resourceExists(path) && !_request_->locationInfo()->delete_)
-            throw ErrCode(409, "MYNAME"); //why MYNAME is not working btw? if delete is not allowed (=== file is there)
+            throw ErrCode(409, MYNAME);
     }
     if (_append_)
         file.open(path.c_str(), std::ios::binary | std::ios::app);
@@ -197,7 +197,7 @@ void Client::handlePost()
     if (!file)
     {
         file.close();
-        throw ErrCode(500, "MYNAME"); // change later;
+        throw ErrCode(500, MYNAME);
     }
     file.write(_buffer_.c_str(), _buffer_.size());
     _bytesWritten_ += _buffer_.size();
@@ -249,7 +249,7 @@ bool    Client::handleCGI()
 	if (WIFEXITED(status) == 0 || WEXITSTATUS(status) != 0) // WIFEXITED(status) == 0 -> child was interrupted
 	{
 		std::cerr << E_CL_CHILD << std::endl;
-		throw ErrCode(500, "MYNAME"); //
+		throw ErrCode(500, MYNAME);
 	}
 	
 	if (resourceExists(_request_->cgiOut()))
@@ -269,7 +269,7 @@ void    Client::launchChild()
     if ((_pid_=fork()) == -1)
     {
         perror("fork error");
-        throw ErrCode(500, "MYNAME"); //
+        throw ErrCode(500, MYNAME);
     }
     if (_pid_ == 0)
     {
