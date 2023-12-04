@@ -216,15 +216,10 @@ void Request::updateVars()
 	
 	std::string extension = fileExtension(_file);
 
-	if (extension == ".shmang")
+	if (extension == ".aboba")
 	{
-		if (_file == "sessionLog.shmang")
+		if (_file == "sessionLog.aboba")
 			_internalScript = sessionLog;
-		/*
-		else if (_file == "anotherInternalDynamicContent.shmang")
-			_internalScript = anotherDynCont;
-		...
-		*/
 	}
 	else if (_activeConfig->getCgiPaths()->find(extension) != _activeConfig->getCgiPaths()->end())
 	{

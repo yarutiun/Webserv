@@ -19,7 +19,7 @@
 2023-12-02 11:47:26	127.0.0.1	POST /api/text.txt
 2023-12-02 11:47:27	127.0.0.1	POST /api/text.txt
 2023-12-02 11:47:28	127.0.0.1	DELETE /api/upload/text.txt
-2023-12-02 11:47:33	127.0.0.1	GET /sessionLog.shmang
+2023-12-02 11:47:33	127.0.0.1	GET /sessionLog.aboba
 2023-12-02 11:49:37	127.0.0.1	GET /
 2023-12-02 11:49:37	127.0.0.1	GET /styles.css
 2023-12-02 11:49:37	127.0.0.1	GET /favicon.ico
