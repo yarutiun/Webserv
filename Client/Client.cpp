@@ -70,10 +70,9 @@ void Client::incomingData(std::vector<struct pollfd>::iterator pollstruct)
 {
     _pollStruct_ = pollstruct;
     receive();
-
     if (!_request_)
         newRequest();
-    if (_request_->internalScript())
+    if (_request_->internalScript()) //chera
 		newResponse(_request_->internalScript());
     else if ( _request_->method() == GET)
         handleGet();
@@ -165,7 +164,7 @@ void Client::newResponse(int statusCode)
 	_pollStruct_->events = POLLOUT | POLLHUP;
 }
 
-void Client::newResponse(dynCont &dynContent)
+void Client::newResponse(dynCont dynContent)
 {
     if (_response_)
         delete _response_;
@@ -176,40 +175,45 @@ void Client::newResponse(dynCont &dynContent)
 
 void Client::handlePost()
 {
-    std::ofstream file;
-    std::string path;
+    std::ofstream	outFile;
+	std::string		path;
+	
+	if (_request_->cgiRequest())
+		path = _request_->cgiIn();
+	else
+	{
+		path = _request_->updatedURL();
+		
+		if (resourceExists(path) && !_request_->locationInfo()->delete_)
+			throw ErrCode(409, MYNAME); // if DELETE not allowed and file already exists
+	}
 
-    if (_request_->cgiRequest())
-        path = _request_->cgiIn();
-    else
-    {
-        path = _request_->updatedURL();
-        if (resourceExists(path) && !_request_->locationInfo()->delete_)
-            throw ErrCode(409, "MYNAME"); //why MYNAME is not working btw? if delete is not allowed (=== file is there)
-    }
-    if (_append_)
-        file.open(path.c_str(), std::ios::binary | std::ios::app);
-    else
-    {
-        file.open(path.c_str(), std::ios::binary | std::ios::trunc);
-        _append_ = true;
-    }
-    if (!file)
-    {
-        file.close();
-        throw ErrCode(500, "MYNAME"); // change later;
-    }
-    file.write(_buffer_.c_str(), _buffer_.size());
-    _bytesWritten_ += _buffer_.size();
-    _buffer_.clear();
-    file.close();
-    if (_bytesWritten_ >= _request_->contentLength())
-    {
-        if (_request_->cgiRequest())
-            handleCGI();
-        else
-            newResponse(201);
-    }
+	if (_append_)
+		outFile.open(path.c_str(), std::ios::binary | std::ios::app);
+	else
+	{
+		outFile.open(path.c_str(), std::ios::binary | std::ios::trunc);
+		_append_ = true;
+	}
+
+	if (!outFile)
+	{
+		outFile.close();
+		throw ErrCode(500, MYNAME);
+	}
+
+	outFile.write(_buffer_.c_str(), _buffer_.size());
+	_bytesWritten_ += _buffer_.size();
+	_buffer_.clear();
+	outFile.close();
+
+	if (_bytesWritten_ >= _request_->contentLength())
+	{
+		if (_request_->cgiRequest())
+			handleCGI();
+		else
+			newResponse(201);
+	}
 }
 
 void Client::handleDelete()
@@ -249,7 +253,7 @@ bool    Client::handleCGI()
 	if (WIFEXITED(status) == 0 || WEXITSTATUS(status) != 0) // WIFEXITED(status) == 0 -> child was interrupted
 	{
 		std::cerr << E_CL_CHILD << std::endl;
-		throw ErrCode(500, "MYNAME"); //
+		throw ErrCode(500, MYNAME);
 	}
 	
 	if (resourceExists(_request_->cgiOut()))
@@ -269,7 +273,7 @@ void    Client::launchChild()
     if ((_pid_=fork()) == -1)
     {
         perror("fork error");
-        throw ErrCode(500, "MYNAME"); //
+        throw ErrCode(500, MYNAME);
     }
     if (_pid_ == 0)
     {

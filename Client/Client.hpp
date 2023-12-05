@@ -19,7 +19,7 @@ class Client
         void newRequest();
         void newResponse(std::string sendPath);
         void newResponse(int statusCode);
-        void newResponse(dynCont &dynContent);
+        void newResponse(dynCont dynContent);
         const char *getAddr() const;
         void        handleGet();
         void        handlePost();
