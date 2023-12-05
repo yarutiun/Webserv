@@ -218,8 +218,13 @@ void Client::handlePost()
 
 void Client::handleDelete()
 {
+    std::ifstream fileR(_request_->updatedURL());
+    bool rights = fileR.is_open();
+
     if (isDirectory(_request_->updatedURL()))
 		newResponse(405);
+    else if (!resourceExists(_request_->updatedURL()) && !rights)
+        newResponse(403);
 	else if (!resourceExists(_request_->updatedURL()))
 		newResponse(404);
 	else if (remove(_request_->updatedURL().c_str()) == 0)

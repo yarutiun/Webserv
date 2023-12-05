@@ -1,0 +1,15 @@
+2023-12-03 16:55:53	127.0.0.1	POST /api/hello
+2023-12-03 16:56:23	127.0.0.1	POST /api/hello
+2023-12-03 16:57:00	127.0.0.1	DELETE /api/upload/hello
+2023-12-03 17:38:00	127.0.0.1	POST /fakeLocationThatDoesntExist/
+2023-12-03 17:39:53	127.0.0.1	POST /img/
+2023-12-03 17:39:58	127.0.0.1	POST /
+2023-12-03 17:42:50	127.0.0.1	DELETE /api/upload/k
+2023-12-03 17:43:10	127.0.0.1	DELETE /api/upload/hi
+2023-12-03 17:54:11	127.0.0.1	POST /api/upload/hi
+2023-12-03 17:54:21	127.0.0.1	POST /api/hi
+2023-12-03 17:54:36	127.0.0.1	POST /api/hii
+2023-12-03 17:54:53	127.0.0.1	DELETE /api/hii
+2023-12-03 17:55:03	127.0.0.1	DELETE /api/upload/hii
+2023-12-03 17:55:21	127.0.0.1	DELETE /api/upload/hii
+2023-12-03 17:55:32	127.0.0.1	DELETE /api/upload/hi
