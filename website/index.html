@@ -16,11 +16,10 @@
 		<ul>
 			<li>Enter text to upload</li>
 			<li>Choose a file to upload</li>
-			<li>Visit the cookie tracking log</li>
 			<li>Check out directory listing</li>
+			<li>Delete the submitted text</li>
 			<li>Go to the CGI testing page</li>
-			<li>Delete your text again</li>
-			
+
 		</ul>
 		<br>
 		<br>
@@ -28,7 +27,7 @@
 
 			<div class="content_subgroup_01">
 				<div class="input-container_01">
-					<input type="text" id="input" name="input" class="input_01" placeholder="Enter your text">
+					<input type="text" id="input" name="input" class="input_01" placeholder="Enter text">
 					<button class="button_01" onclick="submitText()">Submit text</button>
 				</div>
 				<div class="input-container_01">
@@ -37,10 +36,10 @@
 				</div>
 			</div>
 
-			<div class="content_subgroup_01">	
+			<div class="content_subgroup_01">
 				<div class="input-container_01">
-					<a href="/sessionLog.aboba">
-						<button class="button_01">Go to session log</button>
+					<a href="#">
+						<button class="button_01" onclick="deleteText()">Delete text</button>
 					</a>
 				</div>
 				<div class="input-container_01">
@@ -57,18 +56,14 @@
 					</a>
 				</div>
 				<div class="input-container_01">
-					<a href="#">
-						<button class="button_01" onclick="deleteText()">Delete the text again</button>
+					<a href="/CGI/script.py">
+						<button class="button_01">Send CGI Get request (py)</button>
 					</a>
 				</div>
 			</div>
 
 			<div class="content_subgroup_01">	
-				<div class="input-container_01">
-					<a href="/CGI/script.py">
-						<button class="button_01">Send CGI Get request (py)</button>
-					</a>
-				</div>
+
 				<div class="input-container_01">
 					<a href="/CGI/loop.py">
 						<button class="button_01">Start an infinite loop py script <br><tiny>Open another tab and send parallel requests before the child hits its timeout!</tiny></button>
