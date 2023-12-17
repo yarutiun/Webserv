@@ -111,7 +111,6 @@ std::string DynContent::buildSessionLogPage()
 		<< "<h2>" << "Log for session id " << _request.sessionID() << "</h2>\n"
 		<< "<logtext>" << logFile.rdbuf() << "</logtext>\n"
 		<< "</div>\n"
-		<< "<img style=\"margin-left: auto; position: fixed; top: 0; right: 0; height: 70%; z-index: 1;\" src=\"/img/catlockHolmes.png\">\n"
 		<< "</body>\n"
 		<< "</html>\n";
 	logFile.close();
