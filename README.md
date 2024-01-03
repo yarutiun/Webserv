@@ -1,4 +1,4 @@
-# Webserv
+# 🕸️🕸️🕸️ Webserv 🕸️🕸️🕸️
 
 Webserv is a lightweight HTTP server implementation written in C++. It aims to provide a simple and efficient web server that can handle basic HTTP requests and serve static content.
 
