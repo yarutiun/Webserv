@@ -17,6 +17,15 @@ Webserv is a lightweight HTTP server implementation written in C++. It aims to p
 - C++98 compiler
 - Make
 
+
+## CGI Support
+
+Webserv includes support for CGI (Common Gateway Interface), allowing you to dynamically generate content and execute scripts on the server side.
+
+### What is CGI?
+
+CGI (Common Gateway Interface) is a standard protocol for web servers to execute programs or scripts on behalf of a user, generating dynamic content. With CGI support in Webserv, you can leverage the power of server-side scripting languages to enhance the functionality of your web applications.
+
 ### Building
 
 ```git clone https://github.com/yarutiun/Webserv.git```
@@ -25,7 +34,7 @@ Webserv is a lightweight HTTP server implementation written in C++. It aims to p
 
 ```make```
 
-```./a.out```
+```./webserv```
 
 ### Running
 
